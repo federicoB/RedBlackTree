@@ -7,4 +7,15 @@ public class RedBlackTree<ItemType extends Comparable> {
 
     private RedBlackTree<ItemType> rightChild;
 
+    private ItemType value;
+
+    public RedBlackTree(ItemType value) {
+        this.value = value;
+    }
+
+    public RedBlackTree<ItemType> lookUpNode(ItemType item) {
+
+        return null;
+    }
+
 }
