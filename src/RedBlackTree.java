@@ -36,26 +36,44 @@ public class RedBlackTree<ItemType extends Comparable> {
         this.rightChild = null;
     }
 
+    /**
+     * Search if a node containg the given item is contained on the three and if is return it.
+     *
+     * @param item ItemType: the item to search.
+     * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found, null otherwise.
+     */
     public RedBlackTree<ItemType> lookUpNode(ItemType item) {
 
         return null;
     }
 
+    /**
+     * Get the next nearest node.
+     * @return RedBlackTree&lt;ItemType&gt; : the successor node.
+     */
     private RedBlackTree<ItemType> successorNode() {
 
         return null;
     }
 
+    /**
+     * Get the previous nearest node.
+     * @return RedBlackTree&lt;ItemType&gt; : the predecessor node.
+     */
     private RedBlackTree<ItemType> predecessorNode() {
 
         return null;
     }
 
+    /**
+     * Get the minimum item of the tree.
+     * @return ItemType: the minimum item of the tree.
+     */
     public ItemType min() {
 
         return null;
     }
-
+    
     public ItemType max() {
 
         return null;
