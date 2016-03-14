@@ -41,13 +41,32 @@ public class RedBlackTree<ItemType extends Comparable> {
         return null;
     }
 
+    private RedBlackTree<ItemType> successorNode() {
+
+        return null;
+    }
+
+    private RedBlackTree<ItemType> predecessorNode() {
+
+        return null;
+    }
+
+    public ItemType min() {
+
+        return null;
+    }
+
+    public ItemType max() {
+
+        return null;
+    }
+
     /**
      * Define an enum for the color of the node.
      */
     private enum RBColor {
         BLACK,RED
     }
-
 
 
 }
