@@ -84,13 +84,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return ItemType: the minimum item of the tree.
      */
     public RedBlackTree<ItemType> min() {
-
-        return null;
+        if (this.leftChild == null) return this;
+        else return this.leftChild.min();
     }
 
     public RedBlackTree<ItemType> max() {
-
-        return null;
+        if (this.rightChild == null) return this;
+        else return this.rightChild.max();
     }
 
     /**
