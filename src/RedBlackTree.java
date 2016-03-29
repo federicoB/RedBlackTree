@@ -11,6 +11,11 @@
 public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
+     * The parent tree.
+     */
+    private RedBlackTree<ItemType> parent;
+
+    /**
      * The left subtree.
      */
     private RedBlackTree<ItemType> leftChild;
@@ -35,6 +40,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     public RedBlackTree(ItemType value) {
         this.value = value;
         this.color = RBColor.BLACK;
+        this.leftChild = null;
+        this.rightChild = null;
+    }
+
+    public RedBlackTree(ItemType value, RBColor color) {
+        this.value = value;
+        this.color = color;
         this.leftChild = null;
         this.rightChild = null;
     }
@@ -79,18 +91,55 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Get the minimum item of the tree.
+     * Get the tree that cointans the minimum item of the tree.
      *
-     * @return ItemType: the minimum item of the tree.
+     * @return ItemType: the tree that cointans the the minimum item of the tree.
      */
     public RedBlackTree<ItemType> min() {
         if (this.leftChild == null) return this;
         else return this.leftChild.min();
     }
 
+    /**
+     * Get the tree that cointans the maximum item of the tree.
+     *
+     * @return ItemType: the tree that cointans the the maximum item of the tree.
+     */
     public RedBlackTree<ItemType> max() {
         if (this.rightChild == null) return this;
         else return this.rightChild.max();
+    }
+
+    /**
+     * Insert a new node on the tree.
+     *
+     * @param item ItemType: the item to insert in the tree.
+     */
+    public void insert(ItemType item) {
+
+    }
+
+    public void rotateleft() {
+        if (this.rightChild != null) {
+            RedBlackTree<ItemType> rightChild = this.rightChild;
+            RedBlackTree<ItemType> parent = this.parent;
+            this.rightChild = rightChild.leftChild;
+            if (rightChild.leftChild != null) rightChild.leftChild.parent = this;
+            rightChild.leftChild = this;
+            this.parent = rightChild;
+            rightChild.parent = parent;
+            if (parent != null) {
+                if (parent.leftChild == this) {
+                    parent.leftChild = rightChild;
+                } else {
+                    parent.rightChild = rightChild;
+                }
+            }
+        }
+    }
+
+    public void rotateRight() {
+
     }
 
     /**
