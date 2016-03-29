@@ -75,8 +75,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return RedBlackTree&lt;ItemType&gt; : the predecessor node.
      */
     private RedBlackTree<ItemType> predecessorNode() {
-
-        return null;
+        return this.leftChild.max();
     }
 
     /**
