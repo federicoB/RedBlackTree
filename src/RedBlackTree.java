@@ -66,8 +66,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return RedBlackTree&lt;ItemType&gt; : the successor node.
      */
     private RedBlackTree<ItemType> successorNode() {
-
-        return null;
+        return this.rightChild.min();
     }
 
     /**
@@ -85,12 +84,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      *
      * @return ItemType: the minimum item of the tree.
      */
-    public ItemType min() {
+    public RedBlackTree<ItemType> min() {
 
         return null;
     }
 
-    public ItemType max() {
+    public RedBlackTree<ItemType> max() {
 
         return null;
     }
