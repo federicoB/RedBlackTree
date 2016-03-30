@@ -139,7 +139,22 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     public void rotateRight() {
-
+        if (this.leftChild != null) {
+            RedBlackTree<ItemType> leftChild = this.leftChild;
+            RedBlackTree<ItemType> parent = this.parent;
+            this.leftChild = leftChild.rightChild;
+            if (leftChild.rightChild != null) leftChild.rightChild.parent = this;
+            leftChild.rightChild = this;
+            this.parent = leftChild;
+            leftChild.parent = parent;
+            if (parent != null) {
+                if (parent.leftChild == this) {
+                    parent.leftChild = leftChild;
+                } else {
+                    parent.rightChild = leftChild;
+                }
+            }
+        }
     }
 
     /**
