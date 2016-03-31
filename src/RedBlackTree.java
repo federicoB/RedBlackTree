@@ -3,7 +3,7 @@
  */
 
 /**
- * RedBlackTree is a type of Data structure. It's a binary search tree with auto-balance.
+ * RedBlackTree is a data structure. It's a binary search tree with auto-balance system.
  *
  * @param <ItemType extends Comparable<ItemType>> the type of data that the tree will contain.
  *                  It must implement the comparable interface and being comparable with his own.
@@ -34,39 +34,64 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
      * Create a new Tree with a given value.
-     *
+     *  Use this for create the root.
      * @param value ItemType: the value of the node to create.
      */
     public RedBlackTree(ItemType value) {
+        //set the given value
         this.value = value;
+        //the color of the root is black
         this.color = RBColor.BLACK;
+        //set the leftchild as null because it doesn't exist yet.
         this.leftChild = null;
-        this.rightChild = null;
-    }
-
-    public RedBlackTree(ItemType value, RBColor color) {
-        this.value = value;
-        this.color = color;
-        this.leftChild = null;
+        //set the rightchild as null because it doesn't exist yet.
         this.rightChild = null;
     }
 
     /**
-     * Search if a node containg the given item is contained on the three and if is return it.
+     * Create a new Tree with the given value and color.
+     * Use this for creating every node.
+     *
+     * @param value ItemType: the value of the node to create.
+     * @param color RBColor: the color of the new tree/node.
+     */
+    public RedBlackTree(ItemType value, RBColor color) {
+        //set the given value
+        this.value = value;
+        //set the given color
+        this.color = color;
+        //set the leftchild as null because it doesn't exist yet.
+        this.leftChild = null;
+        //set the rightchild as null because it doesn't exist yet.
+        this.rightChild = null;
+    }
+
+    /**
+     * Search if a node contain the given item is contained on the three and if is return it.
      *
      * @param item ItemType: the item to search.
      * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found, null otherwise.
      */
     public RedBlackTree<ItemType> lookUpNode(ItemType item) {
+        //if the tree is a leaf and doens't cointains nothing return null
         if (this.value == null) return null;
+            //otherwise if the node has a value
         else {
+            //create a comparison variable with the comparison result with the researched item and the current value
             int comparison = this.value.compareTo(item);
+            //if the node contains the searched value return himself.
             if (comparison == 0) return this;
+                //else if the node value is less than the searched
             else if (comparison < 0) {
+                //but the leftchild doesn't exist return null
                 if (this.leftChild == null) return null;
+                    //but if the leftchild exist call lookup on him
                 else return this.leftChild.lookUpNode(item);
+                //if the node value in greater of the searched instead
             } else {
+                //but the rightchil doesn't exist return null
                 if (this.rightChild == null) return null;
+                    //but if the leftchild exist call lookup on him
                 else return this.rightChild.lookUpNode(item);
             }
         }
