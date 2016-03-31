@@ -153,7 +153,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             RedBlackTree<ItemType> parent = this.parent;
             //substitute the rightchild with the richilds's leftchild
             this.rightChild = rightChild.leftChild;
-            //if the rightchild's leftchild exist set is parent to the current node
+            //if the rightchild's leftchild exist set its parent to the current node
             if (rightChild.leftChild != null) rightChild.leftChild.parent = this;
             //set the rightchild's leftchild to the current note
             rightChild.leftChild = this;
@@ -177,18 +177,31 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     public void rotateRight() {
+        //if the node has a leftchild
         if (this.leftChild != null) {
+            //get the leftchild
             RedBlackTree<ItemType> leftChild = this.leftChild;
+            //get the parent
             RedBlackTree<ItemType> parent = this.parent;
+            //substitute the leftchild with the leftchild's rightchild
             this.leftChild = leftChild.rightChild;
+            //if the leftchild's rightchild exist set its parent to the current node
             if (leftChild.rightChild != null) leftChild.rightChild.parent = this;
+            //set the leftchild's rightchild to the current node
             leftChild.rightChild = this;
+            //the parent of the current node become his leftchild
             this.parent = leftChild;
+            //the leftchild's parent becomes the parent of the current node
             leftChild.parent = parent;
+            //if the current node is not a root
             if (parent != null) {
+                //and the current node was his leftchild
                 if (parent.leftChild == this) {
+                    //change the parent leftchild
                     parent.leftChild = leftChild;
+                    //or if the current node was his rightchild
                 } else {
+                    //change the parent rightchild
                     parent.rightChild = leftChild;
                 }
             }
