@@ -209,13 +209,19 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     public RedBlackTree<ItemType> getSibiling() {
+        //create an initial sibiling with null value
         RedBlackTree<ItemType> sibiling = null;
+        //check if the parent of the current node is not null
         if (this.parent != null) {
+            //check if the leftchild of the parent exist and if it's the current node
             if (this.parent.leftChild != null && this.parent.leftChild == this) {
-                //if the rightchild is null it's not a problem
+                //if it is then the sibiling will be the rightchild
                 sibiling = this.parent.rightChild;
+                //if the rightchild doesn't exist it's not a problem
             } else {
+                //otherwise it will be the lefchild
                 sibiling = this.parent.leftChild;
+                //if the leftchild doesn't exist it's not a problem
             }
         }
         return sibiling;
