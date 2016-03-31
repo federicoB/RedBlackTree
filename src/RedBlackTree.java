@@ -145,18 +145,31 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     public void rotateleft() {
+        //if the node has a rightchild
         if (this.rightChild != null) {
+            //get the rightchild
             RedBlackTree<ItemType> rightChild = this.rightChild;
+            //get the parent
             RedBlackTree<ItemType> parent = this.parent;
+            //substitute the rightchild with the richilds's leftchild
             this.rightChild = rightChild.leftChild;
+            //if the rightchild's leftchild exist set is parent to the current node
             if (rightChild.leftChild != null) rightChild.leftChild.parent = this;
+            //set the rightchild's leftchild to the current note
             rightChild.leftChild = this;
+            //the parent of the current node become his rightchild
             this.parent = rightChild;
+            //the rightchild parent become the parent of the current node
             rightChild.parent = parent;
+            //if the current node is not the root
             if (parent != null) {
+                //and the current node was his leftchild
                 if (parent.leftChild == this) {
+                    //change the parent leftchild
                     parent.leftChild = rightChild;
+                    //or if the current node was his rightchild
                 } else {
+                    //change the parent rightchild
                     parent.rightChild = rightChild;
                 }
             }
