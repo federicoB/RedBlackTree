@@ -208,6 +208,34 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         }
     }
 
+    public RedBlackTree<ItemType> getSibiling() {
+        RedBlackTree<ItemType> sibiling = null;
+        if (this.parent != null) {
+            if (this.parent.leftChild != null && this.parent.leftChild == this) {
+                //if the rightchild is null it's not a problem
+                sibiling = this.parent.rightChild;
+            } else {
+                sibiling = this.parent.leftChild;
+            }
+        }
+        return sibiling;
+    }
+
+    public void balance() {
+        RedBlackTree<ItemType> parent = this.parent;
+        if ((parent != null) && (parent.parent != null)) {
+            RedBlackTree<ItemType> grandParent = parent.parent;
+            RedBlackTree<ItemType> uncle = parent.getSibiling();
+            if (grandParent != null && uncle != null) {
+                if (uncle.color == RBColor.RED) {
+                    parent.color = uncle.color = RBColor.BLACK;
+                    grandParent.color = RBColor.RED;
+                    grandParent.balance();
+                }
+            }
+        }
+    }
+
     /**
      * Define an enum for the color of the node.
      */
