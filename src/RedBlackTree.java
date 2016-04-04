@@ -5,7 +5,7 @@
 /**
  * RedBlackTree is a data structure. It's a binary search tree with auto-balance system.
  *
- * @param <ItemType extends Comparable<ItemType>> the type of data that the tree will contain.
+ * @param <ItemType> the type of data that the tree will contain.
  *                  It must implement the comparable interface and being comparable with his own.
  */
 public class RedBlackTree<ItemType extends Comparable<ItemType>> {
@@ -34,7 +34,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
      * Create a new Tree with a given value.
-     *  Use this for create the root.
+     * Use this for create the root.
+     *
      * @param value ItemType: the value of the node to create.
      */
     public RedBlackTree(ItemType value) {
@@ -144,6 +145,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     }
 
+    /**
+     * Rotate the rightsubtree to the left.<br>
+     * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
+     *
+     * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
+     */
     public void rotateleft() {
         //if the node has a rightchild
         if (this.rightChild != null) {
@@ -176,6 +183,11 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         }
     }
 
+    /**
+     * Rotate the rightsubtree to the left.<br>
+     * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
+     * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
+     */
     public void rotateRight() {
         //if the node has a leftchild
         if (this.leftChild != null) {
@@ -208,6 +220,11 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         }
     }
 
+    /**
+     * Gets the sibiling of the current tree.
+     * For example the rightchild if the current tree is a leftchild or the opposite if the current tree is a rightchild.
+     * @return RedBlackTree<ItemType>: the sibiling of the current tree.
+     */
     public RedBlackTree<ItemType> getSibiling() {
         //create an initial sibiling with null value
         RedBlackTree<ItemType> sibiling = null;
@@ -227,17 +244,58 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         return sibiling;
     }
 
+    /**
+     * Balance the tree.
+     * In this way all operation are made in log(N).
+     * For complete reference see <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Insertion"> the wiky page </a>
+     */
     public void balance() {
+        //get the parent
         RedBlackTree<ItemType> parent = this.parent;
+        //if parent exist and grandparent exist
         if ((parent != null) && (parent.parent != null)) {
+            //get the grandparent
             RedBlackTree<ItemType> grandParent = parent.parent;
+            //get the uncle
             RedBlackTree<ItemType> uncle = parent.getSibiling();
-            if (grandParent != null && uncle != null) {
+            //if uncle exist
+            if (uncle != null) {
+                //and is Red
                 if (uncle.color == RBColor.RED) {
+                    //set parent and uncle to black
                     parent.color = uncle.color = RBColor.BLACK;
+                    //set the grandparent on red this can cause breaking rules
                     grandParent.color = RBColor.RED;
+                    //so call balance on grandparent
                     grandParent.balance();
                 }
+                //if the uncle is not red
+                else {
+                    //if we are the rightchild of our parent and his is the leftchild of the grandparent
+                    if ((this == parent.rightChild) && (parent == grandParent.leftChild)) {
+                        //rotate left
+                        parent.rotateleft();
+                        //call balance on parent
+                        parent.balance();
+                        //if we are the leftchild of out parent and his is the leftchild of the grandparent
+                    } else if ((this == parent.leftChild) && (parent == grandParent.rightChild)) {
+                        //rotate right
+                        parent.rotateRight();
+                        //call balance on parent
+                        parent.balance();
+                    } else {
+                        //if we are a family of leftchilders
+                        if ((this == parent.leftChild) && (parent == grandParent.leftChild)) {
+                            //rotate right on grandparent
+                            grandParent.rotateRight();
+                            //or if we are a family of rightchilders
+                        } else if ((this == parent.rightChild) && (parent == grandParent.rightChild)) {
+                            //rotate left on grandparent
+                            grandParent.rotateleft();
+                        }
+                    }
+                }
+
             }
         }
     }
