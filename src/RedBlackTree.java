@@ -142,7 +142,34 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @param item ItemType: the item to insert in the tree.
      */
     public void insert(ItemType item) {
-
+        //save in a variable the value of the comparison for fast comparing
+        int comparison = this.value.compareTo(item);
+        //if the item is less than the current value
+        if (comparison < 0) {
+            //and the leftchild doesn't exist
+            if (this.leftChild == null) {
+                //create a new Tree on the leftchild
+                this.leftChild = new RedBlackTree<ItemType>(item);
+                //balance the leftchild
+                this.leftChild.balance();
+            } else {
+                //otherwise call insert on the leftchild
+                this.leftChild.insert(item);
+            }
+        }
+        //if the item to insert in greater than the current value
+        else {
+            //and the rightchild doesn't exist
+            if (this.rightChild == null) {
+                //create a new Tree on the rightchild
+                this.rightChild = new RedBlackTree<ItemType>(item);
+                //balance the new rightchild.
+                this.rightChild.balance();
+            } else {
+                //otherwise call insert on the rightchild
+                this.rightChild.insert(item);
+            }
+        }
     }
 
     /**
