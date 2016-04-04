@@ -151,7 +151,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      *
      * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
      */
-    public void rotateleft() {
+    private void rotateleft() {
         //if the node has a rightchild
         if (this.rightChild != null) {
             //get the rightchild
@@ -188,7 +188,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
      * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
      */
-    public void rotateRight() {
+    private void rotateRight() {
         //if the node has a leftchild
         if (this.leftChild != null) {
             //get the leftchild
@@ -225,7 +225,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * For example the rightchild if the current tree is a leftchild or the opposite if the current tree is a rightchild.
      * @return RedBlackTree<ItemType>: the sibiling of the current tree.
      */
-    public RedBlackTree<ItemType> getSibiling() {
+    private RedBlackTree<ItemType> getSibiling() {
         //create an initial sibiling with null value
         RedBlackTree<ItemType> sibiling = null;
         //check if the parent of the current node is not null
@@ -249,7 +249,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * In this way all operation are made in log(N).
      * For complete reference see <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Insertion"> the wiky page </a>
      */
-    public void balance() {
+    private void balance() {
         //get the parent
         RedBlackTree<ItemType> parent = this.parent;
         //if parent exist and grandparent exist
