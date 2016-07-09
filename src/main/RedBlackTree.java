@@ -68,6 +68,15 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
+     * Get the value cointained in the node.
+     *
+     * @return ItemType: the value of the node.
+     */
+    public ItemType getValue() {
+        return value;
+    }
+
+    /**
      * Search if a node contain the given item is contained on the three and if is return it.
      *
      * @param item ItemType: the item to search.
@@ -96,6 +105,16 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 else return this.rightChild.lookUpNode(item);
             }
         }
+    }
+
+    /**
+     * Check if an item is in the tree or not.
+     *
+     * @param item ItemType: the item to search
+     * @return boolean: true if the item is constained in the tree false otherwise.
+     */
+    public boolean contains(ItemType item) {
+        return (this.lookUpNode(item) != null);
     }
 
     /**
