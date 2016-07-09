@@ -10,11 +10,11 @@ Every "Node" can contains generic data and have two children that are nodes them
 The left child has a lower value than the parent, le right child a greater.
 
 The specific rules of red-black tree are:
-1. Every node has a color: red or black
-2. The root (a node without parent) is black
-3. Every leaf (a node without children) is black
-4. Both children of a black node are red.
-5. Both subtree of a node has the same number of black nodes.
+* Every node has a color: red or black
+* The root (a node without parent) is black
+* Every leaf (a node without children) is black
+* Both children of a black node are red.
+* Both subtree of a node has the same number of black nodes.
 
 ###Features
 They are really efficient to implements dictionaries and sets, especially if you can order the keys.
