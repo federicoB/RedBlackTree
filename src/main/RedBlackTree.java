@@ -51,12 +51,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
      * Create a new Tree with the given value and color.
-     * Use this for creating every node.
+     * Use internally for adding nodes to an existing tree.
      *
      * @param value ItemType: the value of the node to create.
      * @param color RBColor: the color of the new tree/node.
      */
-    public RedBlackTree(ItemType value, RBColor color) {
+    private RedBlackTree(ItemType value, RBColor color) {
         //set the given value
         this.value = value;
         //set the given color
@@ -149,7 +149,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //and the leftchild doesn't exist
             if (this.leftChild == null) {
                 //create a new Tree on the leftchild
-                this.leftChild = new RedBlackTree<ItemType>(item);
+                this.leftChild = new RedBlackTree<>(item);
                 //balance the leftchild
                 this.leftChild.balance();
             } else {
@@ -162,7 +162,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //and the rightchild doesn't exist
             if (this.rightChild == null) {
                 //create a new Tree on the rightchild
-                this.rightChild = new RedBlackTree<ItemType>(item);
+                this.rightChild = new RedBlackTree<>(item);
                 //balance the new rightchild.
                 this.rightChild.balance();
             } else {
