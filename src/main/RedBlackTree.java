@@ -91,13 +91,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             int comparison = this.value.compareTo(item);
             //if the node contains the searched value return himself.
             if (comparison == 0) return this;
-                //else if the node value is less than the searched
-            else if (comparison < 0) {
+                //else if the node value is greater than the searched
+            else if (comparison > 0) {
                 //but the leftchild doesn't exist return null
                 if (this.leftChild == null) return null;
                     //but if the leftchild exist call lookup on him
                 else return this.leftChild.lookUpNode(item);
-                //if the node value in greater of the searched instead
+                //if the node value in greter of the searched instead
             } else {
                 //but the rightchil doesn't exist return null
                 if (this.rightChild == null) return null;
@@ -163,8 +163,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     public void insert(ItemType item) {
         //save in a variable the value of the comparison for fast comparing
         int comparison = this.value.compareTo(item);
-        //if the item is less than the current value
-        if (comparison < 0) {
+        //if the item is greter than the current value
+        if (comparison > 0) {
             //and the leftchild doesn't exist
             if (this.leftChild == null) {
                 //create a new Tree on the leftchild

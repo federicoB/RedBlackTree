@@ -1,11 +1,10 @@
-import com.sun.deploy.util.ArrayUtil;
+import org.apache.commons.lang3.ArrayUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class RedBlackTreeTest {
 
@@ -37,13 +36,12 @@ public class RedBlackTreeTest {
 
   @Test
   public void testMin() throws Exception {
-    //TODO add apache commons to dependacies so you can use ArrayUtils and convert primitive array to list
-    // Assert.assertEquals((long)tree.min().getValue(), Collections.min(Arrays.asList()));
+    Assert.assertEquals(tree.min().getValue(), Collections.min(Arrays.asList(ArrayUtils.toObject(numbers))));
   }
 
   @Test
   public void testMax() throws Exception {
-    Assert.assertEquals((long)tree.max().getValue(),54);
+    Assert.assertEquals(tree.max().getValue(), Collections.max(Arrays.asList(ArrayUtils.toObject(numbers))));
   }
 
   @Test
