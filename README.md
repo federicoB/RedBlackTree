@@ -20,3 +20,6 @@ The specific rules of red-black tree are:
 They are really efficient to implements dictionaries and sets, especially if you can order the keys.
 Those trees have auto-balancing systems so the maximum height is always limited to O(logN) where N is the number of nodes of the tree.
 In this way lots of operation can be executed in O(logN) that is a very efficient value.
+
+More precisely a red-black tree with n internal nodes has height at most 2lg(n+1), an interesting proof of this lemma can be found at page. 309 of 
+"Introduction to Algorithms 3rd Ed. by Cormen, Leiserson, Rivest, Stein. 2009".
