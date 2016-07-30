@@ -23,3 +23,5 @@ In this way lots of operation can be executed in O(logN) that is a very efficien
 
 More precisely a red-black tree with n internal nodes has height at most 2lg(n+1), an interesting proof of this lemma can be found at page. 309 of 
 "Introduction to Algorithms 3rd Ed. by Cormen, Leiserson, Rivest, Stein. 2009".
+
+The need of nil black leaves is motivated by the fact that the rotation algorithms are based a lot on "uncles" and those uncles must exist.

@@ -9,7 +9,7 @@ import java.util.Collections;
 public class RedBlackTreeTest {
 
   private RedBlackTree<Integer> tree;
-  private int[] numbers = {3,1,5};
+  private int[] numbers = {1, 2, 3, 4, 5, 6, 7};
 
   @Before
   public void setup() {

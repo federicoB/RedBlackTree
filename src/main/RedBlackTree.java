@@ -32,6 +32,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      */
     private RBColor color;
 
+    private RedBlackTree<ItemType> nullLeaf;
+
     /**
      * Create a new Tree with a given value.
      * Use this for create the root.
@@ -43,28 +45,43 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         this.value = value;
         //the color of the root is black
         this.color = RBColor.BLACK;
+        //create a new nullleaf for the entire tree
+        this.nullLeaf = new RedBlackTree<ItemType>();
         //set the leftchild as null because it doesn't exist yet.
-        this.leftChild = null;
+        this.leftChild = nullLeaf;
         //set the rightchild as null because it doesn't exist yet.
+        this.rightChild = nullLeaf;
+    }
+
+    /**
+     * Used for create empy black leaves
+     */
+    private RedBlackTree() {
+        this.value = null;
+        this.color = RBColor.BLACK;
+        this.leftChild = null;
         this.rightChild = null;
     }
 
     /**
-     * Create a new Tree with the given value and color.
+     * Create a new Tree with the given value and parent.
      * Use internally for adding nodes to an existing tree.
      *
      * @param value ItemType: the value of the node to create.
-     * @param color RBColor: the color of the new tree/node.
+     * @param parent RedBlackTree<ItemType>: the parent of the new node.
      */
-    private RedBlackTree(ItemType value, RBColor color) {
+    private RedBlackTree(ItemType value, RedBlackTree<ItemType> parent) {
         //set the given value
         this.value = value;
-        //set the given color
-        this.color = color;
+        //set the given parent
+        this.parent = parent;
+        //set the tree nullleaf as the parent nullleaf to save memory
+        this.nullLeaf = parent.nullLeaf;
         //set the leftchild as null because it doesn't exist yet.
-        this.leftChild = null;
+        this.leftChild = this.nullLeaf;
         //set the rightchild as null because it doesn't exist yet.
-        this.rightChild = null;
+        this.rightChild = this.nullLeaf;
+        ;
     }
 
     /**
@@ -161,6 +178,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @param item ItemType: the item to insert in the tree.
      */
     public void insert(ItemType item) {
+        //TODO fix the comparison with the nullleaf
         //save in a variable the value of the comparison for fast comparing
         int comparison = this.value.compareTo(item);
         //if the item is greter than the current value
@@ -168,7 +186,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //and the leftchild doesn't exist
             if (this.leftChild == null) {
                 //create a new Tree on the leftchild
-                this.leftChild = new RedBlackTree<>(item);
+                this.leftChild = new RedBlackTree<>(item, this);
                 //balance the leftchild
                 this.leftChild.balance();
             } else {
@@ -181,7 +199,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //and the rightchild doesn't exist
             if (this.rightChild == null) {
                 //create a new Tree on the rightchild
-                this.rightChild = new RedBlackTree<>(item);
+                this.rightChild = new RedBlackTree<>(item, this);
                 //balance the new rightchild.
                 this.rightChild.balance();
             } else {
