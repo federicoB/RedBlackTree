@@ -81,7 +81,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         this.leftChild = this.nullLeaf;
         //set the rightchild as null because it doesn't exist yet.
         this.rightChild = this.nullLeaf;
-        ;
+        //set a red color
+        this.color = RBColor.RED;
     }
 
     /**
@@ -158,7 +159,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return ItemType: the tree that cointans the the minimum item of the tree.
      */
     public RedBlackTree<ItemType> min() {
-        if (this.leftChild == null) return this;
+        if (this.leftChild == nullLeaf) return this;
         else return this.leftChild.min();
     }
 
@@ -168,36 +169,36 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return ItemType: the tree that cointans the the maximum item of the tree.
      */
     public RedBlackTree<ItemType> max() {
-        if (this.rightChild == null) return this;
+        if (this.rightChild == nullLeaf) return this;
         else return this.rightChild.max();
     }
 
     /**
      * Insert a new node on the tree.
-     *
+     *  It return the new root of the tree that can have changed because of balancing.
      * @param item ItemType: the item to insert in the tree.
+     * @return RedBlackTree<ItemType>: the new root of the tree.
      */
-    public void insert(ItemType item) {
-        //TODO fix the comparison with the nullleaf
+    public RedBlackTree<ItemType> insert(ItemType item) {
         //save in a variable the value of the comparison for fast comparing
         int comparison = this.value.compareTo(item);
-        //if the item is greter than the current value
+        //if the current value is grater than the item
         if (comparison > 0) {
             //and the leftchild doesn't exist
-            if (this.leftChild == null) {
+            if (this.leftChild == nullLeaf) {
                 //create a new Tree on the leftchild
                 this.leftChild = new RedBlackTree<>(item, this);
                 //balance the leftchild
                 this.leftChild.balance();
             } else {
                 //otherwise call insert on the leftchild
-                this.leftChild.insert(item);
+                return this.leftChild.insert(item);
             }
         }
-        //if the item to insert in greater than the current value
+        //if the current value is lower than the item
         else {
             //and the rightchild doesn't exist
-            if (this.rightChild == null) {
+            if (this.rightChild == nullLeaf) {
                 //create a new Tree on the rightchild
                 this.rightChild = new RedBlackTree<>(item, this);
                 //balance the new rightchild.
@@ -207,6 +208,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 this.rightChild.insert(item);
             }
         }
+        //return the root
+        //called on this for reduce complexity of one
+        return this.getRoot();
     }
 
     /**
@@ -214,8 +218,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
      *
      * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
+     * @return RedBlackTree<ItemType>: the new root of the tree
      */
-    private void rotateleft() {
+    private RedBlackTree<ItemType> rotateleft() {
         //if the node has a rightchild
         if (this.rightChild != null) {
             //get the rightchild
@@ -244,15 +249,20 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     parent.rightChild = rightChild;
                 }
             }
+            //return the new root of the tree if the rotation happened
+            return rightChild;
         }
+        //if nothing rotate return the old root
+        return this;
     }
 
     /**
      * Rotate the rightsubtree to the left.<br>
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
      * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
+     * @return RedBlackTree<ItemType>: the sibiling of the current tree.
      */
-    private void rotateRight() {
+    private RedBlackTree<ItemType> rotateRight() {
         //if the node has a leftchild
         if (this.leftChild != null) {
             //get the leftchild
@@ -281,7 +291,11 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     parent.rightChild = leftChild;
                 }
             }
+            //return the new root of the tree if the rotation happened
+            return leftChild;
         }
+        //if nothing rotate return the old root
+        return this;
     }
 
     /**
@@ -306,6 +320,16 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             }
         }
         return sibiling;
+    }
+
+    /**
+     * Return the root of the tree from which the current node belongs
+     *
+     * @return RedBlackTree<ItemType>: the root of the tree.
+     */
+    public RedBlackTree<ItemType> getRoot() {
+        if (this.parent == null) return this;
+        else return this.parent.getRoot();
     }
 
     /**

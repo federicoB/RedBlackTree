@@ -15,18 +15,13 @@ public class RedBlackTreeTest {
   public void setup() {
     tree = new RedBlackTree<Integer>(numbers[0]);
     for (int i = 1;i<numbers.length;i++) {
-      tree.insert(numbers[i]);
+      tree = tree.insert(numbers[i]);
     }
   }
 
   @Test
   public void testContains() {
     Assert.assertTrue(tree.contains(numbers[1]));
-  }
-
-  @Test
-  public void testGetValue() throws Exception {
-    Assert.assertEquals((long)tree.getValue(),numbers[0]);
   }
 
   @Test
