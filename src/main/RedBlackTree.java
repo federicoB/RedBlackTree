@@ -340,19 +340,24 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     private void balance() {
         //get the parent
         RedBlackTree<ItemType> parent = this.parent;
-        //if parent exist and grandparent exist
-        if ((parent != null) && (parent.parent != null)) {
+        //if the node has no parent
+        if (parent == null) {
+            //the node is the root so we have to color it black
+            this.color = RBColor.BLACK;
+        } else
+            //if parent exist and is black no problem but if is red grandparent must exist //TODO check this
+            if ((parent.color == RBColor.RED) && (parent.parent != null)) {
             //get the grandparent
             RedBlackTree<ItemType> grandParent = parent.parent;
             //get the uncle
             RedBlackTree<ItemType> uncle = parent.getSibiling();
-            //if uncle exist
+                //if uncle exist //TODO maybe remove this the uncle always exist
             if (uncle != null) {
                 //and is Red
                 if (uncle.color == RBColor.RED) {
                     //set parent and uncle to black
                     parent.color = uncle.color = RBColor.BLACK;
-                    //set the grandparent on red this can cause breaking rules
+                    //set the grandparent on red.This cause breaking rules
                     grandParent.color = RBColor.RED;
                     //so call balance on grandparent
                     grandParent.balance();
@@ -362,13 +367,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     //if we are the rightchild of our parent and his is the leftchild of the grandparent
                     if ((this == parent.rightChild) && (parent == grandParent.leftChild)) {
                         //rotate left
-                        parent.rotateleft();
+                        parent = parent.rotateleft();
                         //call balance on parent
                         parent.balance();
                         //if we are the leftchild of out parent and his is the leftchild of the grandparent
                     } else if ((this == parent.leftChild) && (parent == grandParent.rightChild)) {
                         //rotate right
-                        parent.rotateRight();
+                        parent = parent.rotateRight();
                         //call balance on parent
                         parent.balance();
                     } else {
@@ -381,6 +386,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                             //rotate left on grandparent
                             grandParent.rotateleft();
                         }
+                        grandParent.color = RBColor.RED;
+                        parent.color = RBColor.BLACK;
                     }
                 }
 
