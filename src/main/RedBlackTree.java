@@ -386,7 +386,10 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                             //rotate left on grandparent
                             grandParent.rotateleft();
                         }
+                        //fix the color of the rotation, set the old grandparent to red
+                        //because this and grandparent are now children of parent
                         grandParent.color = RBColor.RED;
+                        //and the old parent to black
                         parent.color = RBColor.BLACK;
                     }
                 }
