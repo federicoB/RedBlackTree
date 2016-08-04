@@ -195,7 +195,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 return this.leftChild.insert(item);
             }
         }
-        //if the current value is lower than the item
+        //if the current value is lower or equal than the item //TODO ignore if is equal
         else {
             //and the rightchild doesn't exist
             if (this.rightChild == nullLeaf) {
@@ -397,6 +397,21 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             }
         }
     }
+
+    private void trasplant(RedBlackTree<ItemType> toRemove, RedBlackTree<ItemType> toInsert) {
+        //if the node to remove have a parent we need do change references
+        if (toRemove.parent != null) {
+            //save the parent in a variable
+            RedBlackTree<ItemType> parent = toRemove.parent;
+            //if the nodeToRemove is a leftchild set the new leftchild
+            if (parent.leftChild == toRemove) parent.leftChild = toInsert;
+                //do the opposite if the node to remove is a rightchild
+            else parent.rightChild = toInsert;
+        }
+    }
+
+    
+
 
     /**
      * Define an enum for the color of the node.
