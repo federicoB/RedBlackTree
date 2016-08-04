@@ -95,34 +95,41 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
+     * Find the node with the value given or the nearest node if the value is not present in the tree.
+     *
+     * @param item ItemType: the item to search.
+     * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found.
+     */
+    private RedBlackTree<ItemType> find(ItemType item) {
+        //create a comparison variable with the comparison result with the researched item and the current value
+        int comparison = this.value.compareTo(item);
+        //if the node contains the searched value or is a leaf return himself.
+        if ((comparison == 0) || ((this.leftChild == nullLeaf) && (this.rightChild == nullLeaf))) return this;
+            //else if the node value is greater than the searched
+        else if (comparison > 0) {
+            //but the leftchild doesn't exist return this
+            if (this.leftChild == null) return this;
+                //but if the leftchild exist call lookup on him
+            else return this.leftChild.find(item);
+            //if the node value in greter of the searched instead
+        } else {
+            //but the rightchil doesn't exist return this
+            if (this.rightChild == null) return this;
+                //but if the leftchild exist call lookup on him
+            else return this.rightChild.find(item);
+        }
+    }
+
+    /**
      * Search if a node contain the given item is contained on the three and if is return it.
      *
      * @param item ItemType: the item to search.
      * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found, null otherwise.
      */
     public RedBlackTree<ItemType> lookUpNode(ItemType item) {
-        //if the tree is a leaf and doens't cointains nothing return null
-        if (this.value == null) return null;
-            //otherwise if the node has a value
-        else {
-            //create a comparison variable with the comparison result with the researched item and the current value
-            int comparison = this.value.compareTo(item);
-            //if the node contains the searched value return himself.
-            if (comparison == 0) return this;
-                //else if the node value is greater than the searched
-            else if (comparison > 0) {
-                //but the leftchild doesn't exist return null
-                if (this.leftChild == null) return null;
-                    //but if the leftchild exist call lookup on him
-                else return this.leftChild.lookUpNode(item);
-                //if the node value in greter of the searched instead
-            } else {
-                //but the rightchil doesn't exist return null
-                if (this.rightChild == null) return null;
-                    //but if the leftchild exist call lookup on him
-                else return this.rightChild.lookUpNode(item);
-            }
-        }
+        RedBlackTree<ItemType> result = this.find(item);
+        if (result.getValue() == item) return result;
+        else return null;
     }
 
     /**
@@ -410,7 +417,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         }
     }
 
-    
+
 
 
     /**
