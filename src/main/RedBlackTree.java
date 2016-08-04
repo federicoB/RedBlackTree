@@ -2,6 +2,8 @@
  * Created by Federico Bertani on 13/03/16.
  */
 
+import com.sun.istack.internal.Nullable;
+
 /**
  * RedBlackTree is a data structure. It's a binary search tree with auto-balance system.
  *
@@ -126,9 +128,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @param item ItemType: the item to search.
      * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found, null otherwise.
      */
+    @Nullable
     public RedBlackTree<ItemType> lookUpNode(ItemType item) {
+        //find the node with the searched value of the nearest
         RedBlackTree<ItemType> result = this.find(item);
+        //if the node found has the value searched the item is in the tree.
         if (result.getValue() == item) return result;
+            //otherwise return null
         else return null;
     }
 
