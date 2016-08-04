@@ -11,10 +11,13 @@
 public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
+     * The value of the node.
+     */
+    private final ItemType value;
+    /**
      * The parent tree.
      */
     private RedBlackTree<ItemType> parent;
-
     /**
      * The left subtree.
      */
@@ -23,10 +26,6 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * The right subtree.
      */
     private RedBlackTree<ItemType> rightChild;
-    /**
-     * The value of the node.
-     */
-    private ItemType value;
     /**
      * The color of the node.
      */
