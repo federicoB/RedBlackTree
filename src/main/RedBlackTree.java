@@ -413,9 +413,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         }
     }
 
-    
+    /**
+     * Delete a node from the tree containing the given value
+     *
+     * @param itemToDelete the item to delete from the tree.
+     */
     private void delete(ItemType itemToDelete) {
-
+        
     }
 
 
