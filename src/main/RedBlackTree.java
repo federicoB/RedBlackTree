@@ -110,13 +110,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //else if the node value is greater than the searched
         else if (comparison > 0) {
             //but the leftchild doesn't exist return this
-            if (this.leftChild == null) return this;
+            if (this.leftChild == nullLeaf) return this;
                 //but if the leftchild exist call lookup on him
             else return this.leftChild.find(item);
             //if the node value in greter of the searched instead
         } else {
             //but the rightchil doesn't exist return this
-            if (this.rightChild == null) return this;
+            if (this.rightChild == nullLeaf) return this;
                 //but if the leftchild exist call lookup on him
             else return this.rightChild.find(item);
         }
@@ -193,32 +193,17 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return RedBlackTree<ItemType>: the new root of the tree.
      */
     public RedBlackTree<ItemType> insert(ItemType item) {
-        //save in a variable the value of the comparison for fast comparing
-        int comparison = this.value.compareTo(item);
-        //if the current value is grater than the item
-        if (comparison > 0) {
-            //and the leftchild doesn't exist
-            if (this.leftChild == nullLeaf) {
-                //create a new Tree on the leftchild
-                this.leftChild = new RedBlackTree<>(item, this);
-                //balance the leftchild
-                this.leftChild.balance();
+        RedBlackTree<ItemType> possibleParentNode = find(item);
+        ItemType nodeValue = possibleParentNode.getValue();
+        if (nodeValue != item) {
+            int comparison = nodeValue.compareTo(item);
+            //if the current value is grater than the item
+            if (comparison > 0) {
+                possibleParentNode.leftChild = new RedBlackTree<>(item, this);
+                possibleParentNode.leftChild.balance();
             } else {
-                //otherwise call insert on the leftchild
-                return this.leftChild.insert(item);
-            }
-        }
-        //if the current value is lower or equal than the item //TODO ignore if is equal
-        else {
-            //and the rightchild doesn't exist
-            if (this.rightChild == nullLeaf) {
-                //create a new Tree on the rightchild
-                this.rightChild = new RedBlackTree<>(item, this);
-                //balance the new rightchild.
-                this.rightChild.balance();
-            } else {
-                //otherwise call insert on the rightchild
-                this.rightChild.insert(item);
+                possibleParentNode.rightChild = new RedBlackTree<>(item, this);
+                possibleParentNode.rightChild.balance();
             }
         }
         //return the root
