@@ -2,8 +2,6 @@
  * Created by Federico Bertani on 13/03/16.
  */
 
-import com.sun.istack.internal.Nullable;
-
 /**
  * RedBlackTree is a data structure. It's a binary search tree with auto-balance system.
  *
@@ -128,7 +126,6 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @param item ItemType: the item to search.
      * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found, null otherwise.
      */
-    @Nullable
     public RedBlackTree<ItemType> lookUpNode(ItemType item) {
         //find the node with the searched value of the nearest
         RedBlackTree<ItemType> result = this.find(item);
@@ -193,16 +190,24 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return RedBlackTree<ItemType>: the new root of the tree.
      */
     public RedBlackTree<ItemType> insert(ItemType item) {
+        //get the possibile parent node is the item don't exist already in the tree
         RedBlackTree<ItemType> possibleParentNode = find(item);
+        //get the value of this possibile parent node
         ItemType nodeValue = possibleParentNode.getValue();
+        //if the value is different from the value to insert this means that the searched node is the nearest(successor or predecessor) to the future position of the inserted node.
         if (nodeValue != item) {
+            //create a comparison variable with the comparison result with the researched item and the parent value
             int comparison = nodeValue.compareTo(item);
             //if the current value is grater than the item
             if (comparison > 0) {
+                //create a new node/tree on the leftchild
                 possibleParentNode.leftChild = new RedBlackTree<>(item, this);
+                //balance the leftchild
                 possibleParentNode.leftChild.balance();
             } else {
+                //create a new node/tree on the rightchild
                 possibleParentNode.rightChild = new RedBlackTree<>(item, this);
+                //balance the rightchild
                 possibleParentNode.rightChild.balance();
             }
         }
