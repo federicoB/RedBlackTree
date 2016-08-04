@@ -330,7 +330,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      *
      * @return RedBlackTree<ItemType>: the root of the tree.
      */
-    public RedBlackTree<ItemType> getRoot() {
+    RedBlackTree<ItemType> getRoot() {
         if (this.parent == null) return this;
         else return this.parent.getRoot();
     }
@@ -419,7 +419,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @param itemToDelete the item to delete from the tree.
      */
     private void delete(ItemType itemToDelete) {
-        
+
     }
 
 
