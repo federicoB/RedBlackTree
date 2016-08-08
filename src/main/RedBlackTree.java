@@ -436,19 +436,29 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             } else { //if the node to delete has two children
                 //get its successor (the smaller element of the right subtree)
                 RedBlackTree<ItemType> successor = toRemove.rightChild.min();
+                //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
+                //save the successor color
                 originalColor = successor.color;
+                //if the successor is directly child of the node to remove
                 if (successor.parent != toRemove) {
+                    //trasplant successor rightild (that is the successor's successor)
                     trasplant(successor, successor.rightChild);
-                    //we dont worry about successor.leftchild beacuse it is the minimum and doesn't have a leftchild
+                    //set the successor rightchild as the node to remove rightchild
+                    //we dont worry about successor.leftchild because it is the minimum and doesn't have a leftchild
                     successor.rightChild = toRemove.rightChild;
+                    //fix the rightchild parent
                     successor.rightChild.parent = successor;
                 }
+                //finally trasplant the successor into the position of the node to remove
                 trasplant(toRemove, successor);
+                //adjust successor leftchild
                 successor.leftChild = toRemove.leftChild;
                 //fix leftchild parent
                 successor.leftChild.parent = successor;
+                //adjust successor color
                 successor.color = toRemove.color;
             }
+            //if the origianal color was black
             if (originalColor == RBColor.BLACK) {
                 //TODO call deletionFix
             }
