@@ -6,7 +6,7 @@
  * RedBlackTree is a data structure. It's a binary search tree with auto-balance system.
  *
  * @param <ItemType> the type of data that the tree will contain.
- *                  It must implement the comparable interface and being comparable with his own.
+ *                   It must implement the comparable interface and being comparable with his own.
  */
 public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
@@ -44,7 +44,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         this.value = value;
         //the color of the root is black
         this.color = RBColor.BLACK;
-        //create a new nullleaf for the entire tree
+        //create a new nullLeaf for the entire tree
         this.nullLeaf = new RedBlackTree<ItemType>();
         //set the leftchild as null because it doesn't exist yet.
         this.leftChild = nullLeaf;
@@ -53,7 +53,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Used for create empy black leaves
+     * Used for create empty black leaves
      */
     private RedBlackTree() {
         this.value = null;
@@ -66,7 +66,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * Create a new Tree with the given value and parent.
      * Use internally for adding nodes to an existing tree.
      *
-     * @param value ItemType: the value of the node to create.
+     * @param value  ItemType: the value of the node to create.
      * @param parent RedBlackTree<ItemType>: the parent of the new node.
      */
     private RedBlackTree(ItemType value, RedBlackTree<ItemType> parent) {
@@ -184,7 +184,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
      * Insert a new node on the tree.
-     *  It return the new root of the tree that can have changed because of balancing.
+     * It return the new root of the tree that can have changed because of balancing.
+     *
      * @param item ItemType: the item to insert in the tree.
      * @return RedBlackTree<ItemType>: the new root of the tree.
      */
@@ -219,8 +220,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * Rotate the rightsubtree to the left.<br>
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
      *
-     * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
      * @return RedBlackTree<ItemType>: the new root of the tree
+     * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
      */
     private RedBlackTree<ItemType> rotateleft() {
         //if the node has a rightchild
@@ -261,8 +262,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     /**
      * Rotate the rightsubtree to the left.<br>
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
-     * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
+     *
      * @return RedBlackTree<ItemType>: the sibiling of the current tree.
+     * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
      */
     private RedBlackTree<ItemType> rotateRight() {
         //if the node has a leftchild
@@ -303,6 +305,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     /**
      * Gets the sibiling of the current tree.
      * For example the rightchild if the current tree is a leftchild or the opposite if the current tree is a rightchild.
+     *
      * @return RedBlackTree<ItemType>: the sibiling of the current tree.
      */
     private RedBlackTree<ItemType> getSibiling() {
@@ -349,55 +352,55 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         } else
             //if parent exist and is black no problem but if is red grandparent must exist //TODO check this
             if ((parent.color == RBColor.RED) && (parent.parent != null)) {
-            //get the grandparent
-            RedBlackTree<ItemType> grandParent = parent.parent;
-            //get the uncle
-            RedBlackTree<ItemType> uncle = parent.getSibiling();
+                //get the grandparent
+                RedBlackTree<ItemType> grandParent = parent.parent;
+                //get the uncle
+                RedBlackTree<ItemType> uncle = parent.getSibiling();
                 //if uncle exist //TODO maybe remove this the uncle always exist
-            if (uncle != null) {
-                //and is Red
-                if (uncle.color == RBColor.RED) {
-                    //set parent and uncle to black
-                    parent.color = uncle.color = RBColor.BLACK;
-                    //set the grandparent on red.This cause breaking rules
-                    grandParent.color = RBColor.RED;
-                    //so call balance on grandparent
-                    grandParent.balance();
-                }
-                //if the uncle is not red
-                else {
-                    //if we are the rightchild of our parent and his is the leftchild of the grandparent
-                    if ((this == parent.rightChild) && (parent == grandParent.leftChild)) {
-                        //rotate left
-                        parent = parent.rotateleft();
-                        //call balance on parent
-                        parent.balance();
-                        //if we are the leftchild of out parent and his is the leftchild of the grandparent
-                    } else if ((this == parent.leftChild) && (parent == grandParent.rightChild)) {
-                        //rotate right
-                        parent = parent.rotateRight();
-                        //call balance on parent
-                        parent.balance();
-                    } else {
-                        //if we are a family of leftchilders
-                        if ((this == parent.leftChild) && (parent == grandParent.leftChild)) {
-                            //rotate right on grandparent
-                            grandParent.rotateRight();
-                            //or if we are a family of rightchilders
-                        } else if ((this == parent.rightChild) && (parent == grandParent.rightChild)) {
-                            //rotate left on grandparent
-                            grandParent.rotateleft();
-                        }
-                        //fix the color of the rotation, set the old grandparent to red
-                        //because this and grandparent are now children of parent
+                if (uncle != null) {
+                    //and is Red
+                    if (uncle.color == RBColor.RED) {
+                        //set parent and uncle to black
+                        parent.color = uncle.color = RBColor.BLACK;
+                        //set the grandparent on red.This cause breaking rules
                         grandParent.color = RBColor.RED;
-                        //and the old parent to black
-                        parent.color = RBColor.BLACK;
+                        //so call balance on grandparent
+                        grandParent.balance();
                     }
-                }
+                    //if the uncle is not red
+                    else {
+                        //if we are the rightchild of our parent and his is the leftchild of the grandparent
+                        if ((this == parent.rightChild) && (parent == grandParent.leftChild)) {
+                            //rotate left
+                            parent = parent.rotateleft();
+                            //call balance on parent
+                            parent.balance();
+                            //if we are the leftchild of out parent and his is the leftchild of the grandparent
+                        } else if ((this == parent.leftChild) && (parent == grandParent.rightChild)) {
+                            //rotate right
+                            parent = parent.rotateRight();
+                            //call balance on parent
+                            parent.balance();
+                        } else {
+                            //if we are a family of leftchilders
+                            if ((this == parent.leftChild) && (parent == grandParent.leftChild)) {
+                                //rotate right on grandparent
+                                grandParent.rotateRight();
+                                //or if we are a family of rightchilders
+                            } else if ((this == parent.rightChild) && (parent == grandParent.rightChild)) {
+                                //rotate left on grandparent
+                                grandParent.rotateleft();
+                            }
+                            //fix the color of the rotation, set the old grandparent to red
+                            //because this and grandparent are now children of parent
+                            grandParent.color = RBColor.RED;
+                            //and the old parent to black
+                            parent.color = RBColor.BLACK;
+                        }
+                    }
 
+                }
             }
-        }
     }
 
     private void trasplant(RedBlackTree<ItemType> toRemove, RedBlackTree<ItemType> toInsert) {
@@ -425,12 +428,18 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         if (toRemove != null) {
             //save it original color
             RBColor originalColor = toRemove.color;
+            //create a variable for keep track of a node can can cause rule break.
+            RedBlackTree<ItemType> possibileTreeRuleBreaker;
             //if the leftchild is a null leaf
             if (toRemove.leftChild == nullLeaf) {
+                //set the rightchild of the node to remove as a possible rule breaker
+                possibileTreeRuleBreaker = toRemove.rightChild;
                 //trasplant the rightchild, if the righchild is also a nulleaf the node will be deleted
                 trasplant(toRemove, toRemove.rightChild);
                 //otherwise is the rightchild is a nullleaf
             } else if (toRemove.rightChild == nullLeaf) {
+                //set the leftchild as a node that can braak rules
+                possibileTreeRuleBreaker = toRemove.leftChild;
                 //trasplant the leftchild, if the leftchild is also a nullleaf the node will be deleted
                 trasplant(toRemove, toRemove.leftChild);
             } else { //if the node to delete has two children
@@ -439,6 +448,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
                 //save the successor color
                 originalColor = successor.color;
+                //set the successor's rightchild as a possible rule breaker
+                possibileTreeRuleBreaker = successor.rightChild;
                 //if the successor is directly child of the node to remove
                 if (successor.parent != toRemove) {
                     //trasplant successor rightild (that is the successor's successor)
@@ -460,11 +471,16 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             }
             //if the origianal color was black
             if (originalColor == RBColor.BLACK) {
-                //TODO call deletionFix
+                //start on the possible rule breaker node a fix
+                possibileTreeRuleBreaker.fixDelete();
             }
         }
         //TODO return root
         return null;
+    }
+
+    private void fixDelete() {
+
     }
 
 
