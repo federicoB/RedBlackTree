@@ -433,6 +433,24 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             } else if (toRemove.rightChild == nullLeaf) {
                 //trasplant the leftchild, if the leftchild is also a nullleaf the node will be deleted
                 trasplant(toRemove, toRemove.leftChild);
+            } else { //if the node to delete has two children
+                //get its successor (the smaller element of the right subtree)
+                RedBlackTree<ItemType> successor = toRemove.rightChild.min();
+                originalColor = successor.color;
+                if (successor.parent != toRemove) {
+                    trasplant(successor, successor.rightChild);
+                    //we dont worry about successor.leftchild beacuse it is the minimum and doesn't have a leftchild
+                    successor.rightChild = toRemove.rightChild;
+                    successor.rightChild.parent = successor;
+                }
+                trasplant(toRemove, successor);
+                successor.leftChild = toRemove.leftChild;
+                //fix leftchild parent
+                successor.leftChild.parent = successor;
+                successor.color = toRemove.color;
+            }
+            if (originalColor == RBColor.BLACK) {
+                //TODO call deletionFix
             }
         }
         //TODO return root
