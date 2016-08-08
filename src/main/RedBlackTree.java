@@ -416,9 +416,20 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * Delete a node from the tree containing the given value
      *
      * @param itemToDelete the item to delete from the tree.
+     * @return RedBlackTree<ItemType>: the new root of the tree.
      */
-    private void delete(ItemType itemToDelete) {
-
+    private RedBlackTree<ItemType> delete(ItemType itemToDelete) {
+        RedBlackTree<ItemType> toRemove = lookUpNode(itemToDelete);
+        if (toRemove != null) {
+            RBColor originalColor = toRemove.color;
+            if (toRemove.leftChild == nullLeaf) {
+                trasplant(toRemove, toRemove.leftChild);
+            } else if (toRemove.rightChild == nullLeaf) {
+                trasplant(toRemove, toRemove.rightChild);
+            }
+        }
+        //TODO return root
+        return null;
     }
 
 
