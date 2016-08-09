@@ -512,6 +512,15 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         }
     }
 
+    /**
+     * Get the height of the tree. The max distance between the root and a leaf.
+     *
+     * @return int: the height of the tree.
+     */
+    int getHeight() {
+        return 0;
+    }
+
 
     /**
      * Define an enum for the color of the node.
