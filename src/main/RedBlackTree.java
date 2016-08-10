@@ -595,15 +595,22 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             return 1;
             //if a child exist
         } else {
+            //if leftchild exist
             if (leftChild != nullLeaf) {
+                //sum the height of the leftchild
                 leftheight += this.leftChild.getHeight();
             }
+            //if the rightchild exist
             if (rightChild != nullLeaf) {
-                rightheight += this.leftChild.getHeight();
+                //sum the height of the rightchild
+                rightheight += this.rightChild.getHeight();
             }
+            //if the leftheight is greater than the rightheight
             if (leftheight > rightheight) {
+                //return the leftheight
                 return leftheight;
             } else {
+                //otherwise return the rightheight
                 return rightheight;
             }
         }
