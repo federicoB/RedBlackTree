@@ -421,7 +421,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @param itemToDelete the item to delete from the tree.
      * @return RedBlackTree<ItemType>: the new root of the tree.
      */
-    private RedBlackTree<ItemType> delete(ItemType itemToDelete) {
+    public RedBlackTree<ItemType> delete(ItemType itemToDelete) {
         //get the node to delete
         RedBlackTree<ItemType> toRemove = lookUpNode(itemToDelete);
         //if the node to delete is found
