@@ -584,7 +584,24 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return int: the height of the tree.
      */
     int getHeight() {
-        return 0;
+        //TODO maybe not the best complexity, can be improved
+        int leftheight = 1;
+        int rightheight = 1;
+        if (leftChild != nullLeaf && rightChild != nullLeaf) {
+            return 1;
+        } else {
+            if (leftChild == nullLeaf) {
+                leftheight += this.leftChild.getHeight();
+            }
+            if (rightChild == nullLeaf) {
+                rightheight += this.leftChild.getHeight();
+            }
+            if (leftheight > rightheight) {
+                return leftheight;
+            } else {
+                return rightheight;
+            }
+        }
     }
 
 
