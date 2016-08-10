@@ -530,7 +530,27 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //simmetric case
                 //the uncle is our parent leftchild
                 uncle = this.parent.leftChild;
-
+                if (uncle.color == RBColor.RED) {
+                    uncle.color = RBColor.BLACK;
+                    this.parent.color = RBColor.RED;
+                    this.parent.color = RBColor.RED;
+                    this.parent.rotateRight();
+                    uncle = this.parent.leftChild;
+                }
+                if (uncle.rightChild.color == RBColor.BLACK && uncle.leftChild.color == RBColor.BLACK) {
+                    uncle.color = RBColor.RED;
+                    this.parent.fixDelete();
+                } else if (uncle.leftChild.color == RBColor.BLACK) {
+                    uncle.rightChild.color = RBColor.BLACK;
+                    uncle.color = RBColor.RED;
+                    uncle.rotateleft();
+                    uncle = this.parent.leftChild;
+                }
+                uncle.color = this.parent.color;
+                this.parent.color = RBColor.BLACK;
+                uncle.leftChild.color = RBColor.BLACK;
+                this.parent.rotateRight();
+                this.getRoot().fixDelete();
             }
         }
         this.color = RBColor.BLACK;
