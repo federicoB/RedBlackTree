@@ -585,15 +585,20 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      */
     int getHeight() {
         //TODO maybe not the best complexity, can be improved
+        //initialize a counter for left child height
         int leftheight = 1;
+        //initialize a counter for right child height
         int rightheight = 1;
-        if (leftChild != nullLeaf && rightChild != nullLeaf) {
+        //if the leftchild and the rightchild doesn't exist
+        if (leftChild == nullLeaf && rightChild == nullLeaf) {
+            //return the heigth of the current node, that is one
             return 1;
+            //if a child exist
         } else {
-            if (leftChild == nullLeaf) {
+            if (leftChild != nullLeaf) {
                 leftheight += this.leftChild.getHeight();
             }
-            if (rightChild == nullLeaf) {
+            if (rightChild != nullLeaf) {
                 rightheight += this.leftChild.getHeight();
             }
             if (leftheight > rightheight) {
