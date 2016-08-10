@@ -480,36 +480,60 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     private void fixDelete() {
+        //if the current node is not the root and is color is black
         if (this.parent != null && this.color == RBColor.BLACK) {
+            //declare an uncle node
             RedBlackTree<ItemType> uncle;
             //if we are the leftchild of our parent
             if (this == this.parent.leftChild) {
+                //the uncle is our parent righchild
                 uncle = this.parent.rightChild;
+                //if the uncle color is red
                 if (uncle.color == RBColor.RED) {
+                    //now the uncle color is black
                     uncle.color = RBColor.BLACK;
+                    //the parent color is red
                     this.parent.color = RBColor.RED;
+                    //rotate left, current node become parent, parent become our left children and uncle its left children
                     this.parent.rotateleft();
+                    //redefine the uncle after the rotation
                     uncle = this.parent.rightChild;
                 }
+                //if the new uncle have two black children
                 if (uncle.leftChild.color == RBColor.BLACK && uncle.rightChild.color == RBColor.BLACK) {
+                    //the color of the uncle should be black for decrease black height
                     uncle.color = RBColor.RED;
+                    //cal fixdelete on parent.
                     this.parent.fixDelete();
+                    //if the uncle righchild color is black
                 } else if (uncle.rightChild.color == RBColor.BLACK) {
+                    //set the uncle leftchild color to black
                     uncle.leftChild.color = RBColor.BLACK;
+                    //set the uncle color to red
                     uncle.color = RBColor.RED;
+                    //make a right rotation on uncle
                     uncle.rotateRight();
+                    //redefine the uncle after the rotation
                     uncle = this.parent.rightChild;
                 }
+                //now the uncle color must be our parent color
                 uncle.color = this.parent.color;
+                //the color of the parent must be black
                 this.parent.color = RBColor.BLACK;
+                //the uncle rightchild color must be black
                 uncle.rightChild.color = RBColor.BLACK;
+                //make a left roation on parent
                 this.parent.rotateleft();
+                //call fixdelete on root
                 this.getRoot().fixDelete();
             } else {
                 //simmetric case
+                //the uncle is our parent leftchild
                 uncle = this.parent.leftChild;
+
             }
         }
+        this.color = RBColor.BLACK;
     }
 
     /**
