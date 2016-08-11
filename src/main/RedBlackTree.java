@@ -430,20 +430,19 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             RBColor originalColor = toRemove.color;
             //create a variable for keep track of a node can can cause rule break.
             RedBlackTree<ItemType> possibileTreeRuleBreaker;
-            //if the leftchild is a null leaf
-            if (toRemove.leftChild == nullLeaf) {
-                //set the rightchild of the node to remove as a possible rule breaker
-                possibileTreeRuleBreaker = toRemove.rightChild;
-                //trasplant the rightchild, if the righchild is also a nulleaf the node will be deleted
-                trasplant(toRemove, toRemove.rightChild);
-                //otherwise is the rightchild is a nullleaf
-            } else if (toRemove.rightChild == nullLeaf) {
-                //set the leftchild as a node that can braak rules
-                possibileTreeRuleBreaker = toRemove.leftChild;
-                //trasplant the leftchild, if the leftchild is also a nullleaf the node will be deleted
-                trasplant(toRemove, toRemove.leftChild);
-            } else { //if the node to delete has two children
-                //get its successor (the smaller element of the right subtree)
+		  //if the node has only one child
+		  if (toRemove.leftChild == nullLeaf || toRemove.rightChild == nullLeaf) {
+			//set the not-null child to a node that can cause rule break
+			possibileTreeRuleBreaker = (toRemove.leftChild == nullLeaf) ? rightChild : leftChild;
+			//transplant the child into parent. The child could also be null
+			trasplant(toRemove, possibileTreeRuleBreaker);
+			//if the node was red
+			if ((toRemove.color != RBColor.RED) && (possibileTreeRuleBreaker.color == RBColor.RED)) {
+			  possibileTreeRuleBreaker.color = RBColor.BLACK;
+			}
+			return this;
+		  } else { //if the node to delete has two children
+			//get its successor (the smaller element of the right subtree)
                 RedBlackTree<ItemType> successor = toRemove.rightChild.min();
                 //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
                 //save the successor color
