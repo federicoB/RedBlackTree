@@ -201,13 +201,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //if the current value is grater than the item
             if (comparison > 0) {
                 //create a new node/tree on the leftchild
-                possibleParentNode.leftChild = new RedBlackTree<>(item, this);
-                //balance the leftchild
+			  possibleParentNode.leftChild = new RedBlackTree<>(item, possibleParentNode);
+			  //balance the leftchild
                 possibleParentNode.leftChild.balance();
             } else {
                 //create a new node/tree on the rightchild
-                possibleParentNode.rightChild = new RedBlackTree<>(item, this);
-                //balance the rightchild
+			  possibleParentNode.rightChild = new RedBlackTree<>(item, possibleParentNode);
+			  //balance the rightchild
                 possibleParentNode.rightChild.balance();
             }
         }
@@ -475,8 +475,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 possibileTreeRuleBreaker.fixDelete();
             }
         }
-        //TODO return root
-        return null;
+	  //TODO return the new node frow where the method is called (not the root)
+	  return null;
     }
 
     /**
