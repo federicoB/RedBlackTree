@@ -51,4 +51,12 @@ public class RedBlackTreeTest {
     tree.delete(-30);
     Assert.assertFalse(tree.contains(-30));
   }
+
+  @Test
+  public void simpleTestGetHeigth() throws Exception {
+    //create a new empty tree with one element
+    RedBlackTree<Integer> test = new RedBlackTree<>(3);
+    //the heigth of the tree should be 1
+    Assert.assertEquals(1, test.getHeight());
+  }
 }
