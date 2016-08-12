@@ -21,8 +21,22 @@ public class BinarySearchTree<ItemType extends Comparable<ItemType>> {
    */
   RedBlackTree<ItemType> rightChild;
 
-  public BinarySearchTree(ItemType value) {
-	this.value = value;
+  BinarySearchTree(ItemType value) {
+    this.value = value;
+  }
+
+  public BinarySearchTree(ItemType value, RedBlackTree<ItemType> parent) {
+    this.value = value;
+    this.parent = parent;
+  }
+
+  /**
+   * Get the value cointained in the node.
+   *
+   * @return ItemType: the value of the node.
+   */
+  public ItemType getValue() {
+    return value;
   }
 
 }

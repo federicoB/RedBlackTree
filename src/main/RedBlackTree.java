@@ -52,10 +52,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      * @param parent RedBlackTree<ItemType>: the parent of the new node.
      */
     private RedBlackTree(ItemType value, RedBlackTree<ItemType> parent) {
-	  super(null);
-	  //set the given parent
-        this.parent = parent;
-        //set the tree nullleaf as the parent nullleaf to save memory
+	  super(value, parent);
+	  //set the tree nullleaf as the parent nullleaf to save memory
         this.nullLeaf = parent.nullLeaf;
         //set the leftchild as null because it doesn't exist yet.
         this.leftChild = this.nullLeaf;
@@ -63,15 +61,6 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
         this.rightChild = this.nullLeaf;
         //set a red color
         this.color = RBColor.RED;
-    }
-
-    /**
-     * Get the value cointained in the node.
-     *
-     * @return ItemType: the value of the node.
-     */
-    public ItemType getValue() {
-        return value;
     }
 
     /**
