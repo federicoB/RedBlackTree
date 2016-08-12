@@ -49,9 +49,11 @@ public class RedBlackTreeTest {
 
   @Test
   public void testDelete() throws Exception {
-    tree.insert(-30);
-    tree.delete(-30);
+    tree = tree.insert(-30);
+    tree = tree.delete(-30);
     Assert.assertFalse(tree.contains(-30));
+    tree = tree.delete(4);
+    Assert.assertFalse(tree.contains(4));
   }
 
   @Test

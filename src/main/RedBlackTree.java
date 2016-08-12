@@ -454,7 +454,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 			RedBlackTree<ItemType> successor = toRemove.rightChild.min();
                 //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
                 //save the successor color
-                originalColor = successor.color;
+			originalColor = successor.color;
 			toRemove.value = successor.getValue();
 			successor.delete(successor.getValue());
 			possibileTreeRuleBreaker = successor;
