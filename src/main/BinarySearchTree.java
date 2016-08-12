@@ -24,5 +24,5 @@ public class BinarySearchTree<ItemType extends Comparable<ItemType>> {
   public BinarySearchTree(ItemType value) {
 	this.value = value;
   }
-  
+
 }

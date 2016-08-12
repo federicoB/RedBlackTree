@@ -23,9 +23,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      * @param value ItemType: the value of the node to create.
      */
     public RedBlackTree(ItemType value) {
-        //set the given value
-        this.value = value;
-        //the color of the root is black
+	  super(value);
+	  //the color of the root is black
         this.color = RBColor.BLACK;
         //create a new nullLeaf for the entire tree
         this.nullLeaf = new RedBlackTree<ItemType>();
@@ -39,8 +38,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      * Used for create empty black leaves
      */
     private RedBlackTree() {
-        this.value = null;
-        this.color = RBColor.BLACK;
+	  super(null);
+	  this.color = RBColor.BLACK;
         this.leftChild = null;
         this.rightChild = null;
     }
@@ -53,9 +52,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      * @param parent RedBlackTree<ItemType>: the parent of the new node.
      */
     private RedBlackTree(ItemType value, RedBlackTree<ItemType> parent) {
-        //set the given value
-        this.value = value;
-        //set the given parent
+	  super(null);
+	  //set the given parent
         this.parent = parent;
         //set the tree nullleaf as the parent nullleaf to save memory
         this.nullLeaf = parent.nullLeaf;
