@@ -4,4 +4,20 @@
 
 
 public class BinarySearchTree<ItemType extends Comparable<ItemType>> {
+  /**
+   * The value of the node.
+   */
+  ItemType value;
+  /**
+   * The parent tree.
+   */
+  RedBlackTree<ItemType> parent;
+  /**
+   * The left subtree.
+   */
+  RedBlackTree<ItemType> leftChild;
+  /**
+   * The right subtree.
+   */
+  RedBlackTree<ItemType> rightChild;
 }

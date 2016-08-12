@@ -9,23 +9,6 @@
  *                   It must implement the comparable interface and being comparable with his own.
  */
 public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinarySearchTree<ItemType> {
-
-    /**
-     * The value of the node.
-     */
-	private ItemType value;
-  /**
-     * The parent tree.
-     */
-    private RedBlackTree<ItemType> parent;
-    /**
-     * The left subtree.
-     */
-    private RedBlackTree<ItemType> leftChild;
-    /**
-     * The right subtree.
-     */
-    private RedBlackTree<ItemType> rightChild;
     /**
      * The color of the node.
      */
