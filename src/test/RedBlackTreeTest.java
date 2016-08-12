@@ -43,7 +43,7 @@ public class RedBlackTreeTest {
 
   @Test
   public void testInsert() throws Exception {
-    tree.insert(24);
+    tree = tree.insert(24);
     Assert.assertTrue(tree.contains(24));
   }
 

@@ -13,8 +13,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     /**
      * The value of the node.
      */
-    private final ItemType value;
-    /**
+	private ItemType value;
+  /**
      * The parent tree.
      */
     private RedBlackTree<ItemType> parent;
@@ -362,8 +362,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     if (uncle.color == RBColor.RED) {
                         //set parent and uncle to black
                         parent.color = uncle.color = RBColor.BLACK;
-                        //set the grandparent on red.This cause breaking rules
-                        grandParent.color = RBColor.RED;
+					  //set the grandparent on red.This can cause breaking rules
+					  grandParent.color = RBColor.RED;
                         //so call balance on grandparent
                         grandParent.balance();
                     }
@@ -433,58 +433,39 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 		  //if the node has only one child
 		  if (toRemove.leftChild == nullLeaf || toRemove.rightChild == nullLeaf) {
 			//set the not-null child to a node that can cause rule break
-			possibileTreeRuleBreaker = (toRemove.leftChild == nullLeaf) ? rightChild : leftChild;
+			possibileTreeRuleBreaker = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
 			//transplant the child into parent. The child could also be null
 			trasplant(toRemove, possibileTreeRuleBreaker);
-              //if the node to remove was black and is replaced by a red node
-              if ((toRemove.color == RBColor.BLACK) && (possibileTreeRuleBreaker.color == RBColor.RED)) {
-                  //paint it black
-                  possibileTreeRuleBreaker.color = RBColor.BLACK;
-              }
-              //if the current node is different for the replacer node
-              if (this != possibileTreeRuleBreaker) {
-                  //return the current node
-                  return this;
-              } else {
-                  //otherwise return the new root that is the replacer node
-                  return possibileTreeRuleBreaker;
-              }
-          } else { //if the node to delete has two children
-              //get its successor (the smaller element of the right subtree)
-                RedBlackTree<ItemType> successor = toRemove.rightChild.min();
+			//if the node to remove was black and is replaced by a red node
+			if ((toRemove.color == RBColor.BLACK) && (possibileTreeRuleBreaker.color == RBColor.RED)) {
+			  //paint it black
+			  possibileTreeRuleBreaker.color = RBColor.BLACK;
+			}
+			//if the current node is different for the replacer node
+			if (this != possibileTreeRuleBreaker) {
+			  //return the current node
+			  return this;
+			} else {
+			  //otherwise return the new root that is the replacer node
+			  return possibileTreeRuleBreaker;
+			}
+		  } else { //if the node to delete has two children
+			//get its successor (the smaller element of the right subtree)
+			RedBlackTree<ItemType> successor = toRemove.rightChild.min();
                 //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
                 //save the successor color
                 originalColor = successor.color;
-                //set the successor's rightchild as a possible rule breaker
-                possibileTreeRuleBreaker = successor.rightChild;
-                //if the successor is directly child of the node to remove
-                if (successor.parent != toRemove) {
-                    //trasplant successor rightild (that is the successor's successor)
-                    trasplant(successor, successor.rightChild);
-                    //set the successor rightchild as the node to remove rightchild
-                    //we dont worry about successor.leftchild because it is the minimum and doesn't have a leftchild
-                    successor.rightChild = toRemove.rightChild;
-                    //fix the rightchild parent
-                    successor.rightChild.parent = successor;
-                }
-                //finally trasplant the successor into the position of the node to remove
-                trasplant(toRemove, successor);
-                //adjust successor leftchild
-                successor.leftChild = toRemove.leftChild;
-                //fix leftchild parent
-                successor.leftChild.parent = successor;
-                //adjust successor color
-                successor.color = toRemove.color;
-            }
-            //if the origianal color was black
-            if (originalColor == RBColor.BLACK) {
-                //start on the possible rule breaker node a fix
-                possibileTreeRuleBreaker.fixDelete();
-            }
-        }
+			toRemove.value = successor.getValue();
+			successor.delete(successor.getValue());
+			possibileTreeRuleBreaker = successor;
+		  }
+		  if (originalColor == RBColor.BLACK) {
+			possibileTreeRuleBreaker.fixDelete();
+		  }
+		}
 	  //TODO return the new node frow where the method is called (not the root)
-	  return null;
-    }
+	  return this;
+	}
 
     /**
      * Call this on a node after a rotation for check and rebalance the tree.
