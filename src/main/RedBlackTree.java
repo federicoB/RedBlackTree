@@ -8,7 +8,7 @@
  * @param <ItemType> the type of data that the tree will contain.
  *                   It must implement the comparable interface and being comparable with his own.
  */
-public class RedBlackTree<ItemType extends Comparable<ItemType>> {
+public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinarySearchTree<ItemType> {
 
     /**
      * The value of the node.
