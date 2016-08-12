@@ -20,4 +20,9 @@ public class BinarySearchTree<ItemType extends Comparable<ItemType>> {
    * The right subtree.
    */
   RedBlackTree<ItemType> rightChild;
+
+  public BinarySearchTree(ItemType value) {
+	this.value = value;
+  }
+  
 }
