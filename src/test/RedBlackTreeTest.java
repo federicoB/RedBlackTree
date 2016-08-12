@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static java.lang.Math.log;
+
 public class RedBlackTreeTest {
 
   private RedBlackTree<Integer> tree;
@@ -58,5 +60,11 @@ public class RedBlackTreeTest {
     RedBlackTree<Integer> test = new RedBlackTree<>(3);
     //the heigth of the tree should be 1
     Assert.assertEquals(1, test.getHeight());
+  }
+
+  @Test
+  public void testInsertBalancing() throws Exception {
+    int height = tree.getHeight();
+    Assert.assertTrue(height <= (2 * log(numbers.length + 1)));
   }
 }
