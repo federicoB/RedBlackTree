@@ -436,13 +436,21 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 			possibileTreeRuleBreaker = (toRemove.leftChild == nullLeaf) ? rightChild : leftChild;
 			//transplant the child into parent. The child could also be null
 			trasplant(toRemove, possibileTreeRuleBreaker);
-			//if the node was red
-			if ((toRemove.color != RBColor.RED) && (possibileTreeRuleBreaker.color == RBColor.RED)) {
-			  possibileTreeRuleBreaker.color = RBColor.BLACK;
-			}
-			return this;
-		  } else { //if the node to delete has two children
-			//get its successor (the smaller element of the right subtree)
+              //if the node to remove was black and is replaced by a red node
+              if ((toRemove.color == RBColor.BLACK) && (possibileTreeRuleBreaker.color == RBColor.RED)) {
+                  //paint it black
+                  possibileTreeRuleBreaker.color = RBColor.BLACK;
+              }
+              //if the current node is different for the replacer node
+              if (this != possibileTreeRuleBreaker) {
+                  //return the current node
+                  return this;
+              } else {
+                  //otherwise return the new root that is the replacer node
+                  return possibileTreeRuleBreaker;
+              }
+          } else { //if the node to delete has two children
+              //get its successor (the smaller element of the right subtree)
                 RedBlackTree<ItemType> successor = toRemove.rightChild.min();
                 //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
                 //save the successor color
