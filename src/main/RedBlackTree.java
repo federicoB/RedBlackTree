@@ -10,11 +10,22 @@
  */
 public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinarySearchTree<ItemType> {
     /**
+     * The parent tree.
+     */
+    RedBlackTree<ItemType> parent;
+    /**
+     * The left subtree.
+     */
+    RedBlackTree<ItemType> leftChild;
+    /**
+     * The right subtree.
+     */
+    RedBlackTree<ItemType> rightChild;
+    RedBlackTree<ItemType> nullLeaf;
+    /**
      * The color of the node.
      */
     private RBColor color;
-
-    private RedBlackTree<ItemType> nullLeaf;
 
     /**
      * Create a new Tree with a given value.
@@ -52,8 +63,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      * @param parent RedBlackTree<ItemType>: the parent of the new node.
      */
     private RedBlackTree(ItemType value, RedBlackTree<ItemType> parent) {
-	  super(value, parent);
-	  //set the tree nullleaf as the parent nullleaf to save memory
+        super(value, parent);
+        //set the tree nullleaf as the parent nullleaf to save memory
         this.nullLeaf = parent.nullLeaf;
         //set the leftchild as null because it doesn't exist yet.
         this.leftChild = this.nullLeaf;
@@ -63,94 +74,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
         this.color = RBColor.RED;
     }
 
-    /**
-     * Find the node with the value given or the nearest node if the value is not present in the tree.
-     *
-     * @param item ItemType: the item to search.
-     * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found.
-     */
-    private RedBlackTree<ItemType> find(ItemType item) {
-        //create a comparison variable with the comparison result with the researched item and the current value
-        int comparison = this.value.compareTo(item);
-        //if the node contains the searched value or is a leaf return himself.
-        if ((comparison == 0) || ((this.leftChild == nullLeaf) && (this.rightChild == nullLeaf))) return this;
-            //else if the node value is greater than the searched
-        else if (comparison > 0) {
-            //but the leftchild doesn't exist return this
-            if (this.leftChild == nullLeaf) return this;
-                //but if the leftchild exist call lookup on him
-            else return this.leftChild.find(item);
-            //if the node value in greter of the searched instead
-        } else {
-            //but the rightchil doesn't exist return this
-            if (this.rightChild == nullLeaf) return this;
-                //but if the leftchild exist call lookup on him
-            else return this.rightChild.find(item);
-        }
-    }
 
-    /**
-     * Search if a node contain the given item is contained on the three and if is return it.
-     *
-     * @param item ItemType: the item to search.
-     * @return RedBlackTree&lt;ItemType&gt; : return the searched node if found, null otherwise.
-     */
-    public RedBlackTree<ItemType> lookUpNode(ItemType item) {
-        //find the node with the searched value of the nearest
-        RedBlackTree<ItemType> result = this.find(item);
-        //if the node found has the value searched the item is in the tree.
-        if (result.getValue() == item) return result;
-            //otherwise return null
-        else return null;
-    }
-
-    /**
-     * Check if an item is in the tree or not.
-     *
-     * @param item ItemType: the item to search
-     * @return boolean: true if the item is constained in the tree false otherwise.
-     */
-    public boolean contains(ItemType item) {
-        return (this.lookUpNode(item) != null);
-    }
-
-    /**
-     * Get the next nearest node.
-     *
-     * @return RedBlackTree&lt;ItemType&gt; : the successor node.
-     */
-    private RedBlackTree<ItemType> successorNode() {
-        return this.rightChild.min();
-    }
-
-    /**
-     * Get the previous nearest node.
-     *
-     * @return RedBlackTree&lt;ItemType&gt; : the predecessor node.
-     */
-    private RedBlackTree<ItemType> predecessorNode() {
-        return this.leftChild.max();
-    }
-
-    /**
-     * Get the tree that cointans the minimum item of the tree.
-     *
-     * @return ItemType: the tree that cointans the the minimum item of the tree.
-     */
-    public RedBlackTree<ItemType> min() {
-        if (this.leftChild == nullLeaf) return this;
-        else return this.leftChild.min();
-    }
-
-    /**
-     * Get the tree that cointans the maximum item of the tree.
-     *
-     * @return ItemType: the tree that cointans the the maximum item of the tree.
-     */
-    public RedBlackTree<ItemType> max() {
-        if (this.rightChild == nullLeaf) return this;
-        else return this.rightChild.max();
-    }
 
     /**
      * Insert a new node on the tree.
@@ -161,7 +85,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      */
     public RedBlackTree<ItemType> insert(ItemType item) {
         //get the possibile parent node is the item don't exist already in the tree
-        RedBlackTree<ItemType> possibleParentNode = find(item);
+        RedBlackTree<ItemType> possibleParentNode = (RedBlackTree<ItemType>) find(item);
         //get the value of this possibile parent node
         ItemType nodeValue = possibleParentNode.getValue();
         //if the value is different from the value to insert this means that the searched node is the nearest(successor or predecessor) to the future position of the inserted node.
@@ -183,7 +107,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
         }
         //return the root
         //called on this for reduce complexity of one
-        return this.getRoot();
+        return (RedBlackTree<ItemType>) this.getRoot();
     }
 
     /**
@@ -286,25 +210,15 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
             //check if the leftchild of the parent exist and if it's the current node
             if (this.parent.leftChild != null && this.parent.leftChild == this) {
                 //if it is then the sibiling will be the rightchild
-                sibiling = this.parent.rightChild;
+                sibiling = (RedBlackTree<ItemType>) this.parent.rightChild;
                 //if the rightchild doesn't exist it's not a problem
             } else {
                 //otherwise it will be the lefchild
-                sibiling = this.parent.leftChild;
+                sibiling = (RedBlackTree<ItemType>) this.parent.leftChild;
                 //if the leftchild doesn't exist it's not a problem
             }
         }
         return sibiling;
-    }
-
-    /**
-     * Return the root of the tree from which the current node belongs
-     *
-     * @return RedBlackTree<ItemType>: the root of the tree.
-     */
-    RedBlackTree<ItemType> getRoot() {
-        if (this.parent == null) return this;
-        else return this.parent.getRoot();
     }
 
     /**
@@ -314,7 +228,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      */
     private void balance() {
         //get the parent
-        RedBlackTree<ItemType> parent = this.parent;
+        RedBlackTree<ItemType> parent = (RedBlackTree<ItemType>) this.parent;
         //if the node has no parent
         if (parent == null) {
             //the node is the root so we have to color it black
@@ -393,7 +307,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      */
     public RedBlackTree<ItemType> delete(ItemType itemToDelete) {
         //get the node to delete
-        RedBlackTree<ItemType> toRemove = lookUpNode(itemToDelete);
+        RedBlackTree<ItemType> toRemove = (RedBlackTree<ItemType>) lookUpNode(itemToDelete);
         //if the node to delete is found
         if (toRemove != null) {
             //save it original color
@@ -421,8 +335,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
 			}
 		  } else { //if the node to delete has two children
 			//get its successor (the smaller element of the right subtree)
-			RedBlackTree<ItemType> successor = toRemove.rightChild.min();
-                //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
+              RedBlackTree<ItemType> successor = (RedBlackTree<ItemType>) toRemove.rightChild.min();
+              //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
                 //save the successor color
 			originalColor = successor.color;
 			toRemove.value = successor.getValue();
@@ -487,7 +401,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
                 //make a left roation on parent
                 this.parent.rotateleft();
                 //call fixdelete on root
-                this.getRoot().fixDelete();
+                ((RedBlackTree<ItemType>) this.getRoot()).fixDelete();
             } else {
                 //simmetric case
                 //the uncle is our parent leftchild
@@ -529,48 +443,11 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
                 //make a right rotation on parent
                 this.parent.rotateRight();
                 //call fixdelete on root
-                this.getRoot().fixDelete();
+                ((RedBlackTree<ItemType>) this.getRoot()).fixDelete();
             }
         }
         //set the color of this node on black.
         this.color = RBColor.BLACK;
-    }
-
-    /**
-     * Get the height of the tree. The max distance between the root and a leaf.
-     * @return int: the height of the tree.
-     */
-    int getHeight() {
-        //TODO maybe not the best complexity, can be improved
-        //initialize a counter for left child height
-        int leftheight = 1;
-        //initialize a counter for right child height
-        int rightheight = 1;
-        //if the leftchild and the rightchild doesn't exist
-        if (leftChild == nullLeaf && rightChild == nullLeaf) {
-            //return the heigth of the current node, that is one
-            return 1;
-            //if a child exist
-        } else {
-            //if leftchild exist
-            if (leftChild != nullLeaf) {
-                //sum the height of the leftchild
-                leftheight += this.leftChild.getHeight();
-            }
-            //if the rightchild exist
-            if (rightChild != nullLeaf) {
-                //sum the height of the rightchild
-                rightheight += this.rightChild.getHeight();
-            }
-            //if the leftheight is greater than the rightheight
-            if (leftheight > rightheight) {
-                //return the leftheight
-                return leftheight;
-            } else {
-                //otherwise return the rightheight
-                return rightheight;
-            }
-        }
     }
 
 
