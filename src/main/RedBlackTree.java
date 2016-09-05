@@ -222,13 +222,33 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
     }
 
     /**
+     * Get the tree that cointans the minimum item of the tree.
+     *
+     * @return ItemType: the tree that cointans the the minimum item of the tree.
+     */
+    public RedBlackTree<ItemType> min() {
+        if (this.leftChild == nullLeaf) return this;
+        else return this.leftChild.min();
+    }
+
+    /**
+     * Get the tree that cointans the maximum item of the tree.
+     *
+     * @return ItemType: the tree that cointans the the maximum item of the tree.
+     */
+    public RedBlackTree<ItemType> max() {
+        if (this.rightChild == nullLeaf) return this;
+        else return this.rightChild.max();
+    }
+
+    /**
      * Balance the tree.
      * In this way all operation are made in log(N).
      * For complete reference see <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Insertion"> the wiky page </a>
      */
     private void balance() {
         //get the parent
-        RedBlackTree<ItemType> parent = (RedBlackTree<ItemType>) this.parent;
+        RedBlackTree<ItemType> parent = this.parent;
         //if the node has no parent
         if (parent == null) {
             //the node is the root so we have to color it black
@@ -335,7 +355,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
 			}
 		  } else { //if the node to delete has two children
 			//get its successor (the smaller element of the right subtree)
-              RedBlackTree<ItemType> successor = (RedBlackTree<ItemType>) toRemove.rightChild.min();
+              RedBlackTree<ItemType> successor = toRemove.rightChild.min();
               //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
                 //save the successor color
 			originalColor = successor.color;
