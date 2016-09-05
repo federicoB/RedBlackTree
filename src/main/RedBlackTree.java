@@ -226,6 +226,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      *
      * @return ItemType: the tree that cointans the the minimum item of the tree.
      */
+    @Override
     public RedBlackTree<ItemType> min() {
         if (this.leftChild == nullLeaf) return this;
         else return this.leftChild.min();
@@ -236,9 +237,22 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> extends BinaryS
      *
      * @return ItemType: the tree that cointans the the maximum item of the tree.
      */
+    @Override
     public RedBlackTree<ItemType> max() {
         if (this.rightChild == nullLeaf) return this;
         else return this.rightChild.max();
+    }
+
+    @Override
+    RedBlackTree<ItemType> find(ItemType item) {
+        RedBlackTree<ItemType> returnTree = (RedBlackTree<ItemType>) super.find(item);
+        return (returnTree.getValue() == null) ? returnTree.parent : returnTree;
+    }
+
+    @Override
+    public RedBlackTree<ItemType> lookUpNode(ItemType item) {
+        RedBlackTree returnTree = this.find(item);
+        return (returnTree.getValue() == item) ? returnTree : null;
     }
 
     /**
