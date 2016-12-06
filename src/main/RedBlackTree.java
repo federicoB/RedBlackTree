@@ -428,26 +428,27 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         if (toRemove != null) {
             //save it original color
             RBColor originalColor = toRemove.color;
-            //create a variable for keep track of a node can can cause rule break.
-            RedBlackTree<ItemType> possibileTreeRuleBreaker;
-		  //if the node has only one child
+		  //create a variable for keep track of a the child node to transplant into node to delete
+		  RedBlackTree<ItemType> childToTransplant;
+		  //if the node has only one or zero child
 		  if (toRemove.leftChild == nullLeaf || toRemove.rightChild == nullLeaf) {
-			//set the not-null child to a node that can cause rule break
-			possibileTreeRuleBreaker = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
+			//set the not-null child to a transplant child
+			childToTransplant = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
 			//transplant the child into parent. The child could also be null
-			trasplant(toRemove, possibileTreeRuleBreaker);
+			trasplant(toRemove, childToTransplant);
 			//if the node to remove was black and is replaced by a red node
-			if ((toRemove.color == RBColor.BLACK) && (possibileTreeRuleBreaker.color == RBColor.RED)) {
+			if ((toRemove.color == RBColor.BLACK) && (childToTransplant.color == RBColor.RED)) {
 			  //paint it black
-			  possibileTreeRuleBreaker.color = RBColor.BLACK;
+			  childToTransplant.color = RBColor.BLACK;
 			}
+			//return the changed tree
 			//if the current node is different for the replacer node
-			if (this != possibileTreeRuleBreaker) {
+			if (this != childToTransplant) {
 			  //return the current node
 			  return this;
 			} else {
-			  //otherwise return the new root that is the replacer node
-			  return possibileTreeRuleBreaker;
+			  //otherwise return the new root that is the transplant child
+			  return childToTransplant;
 			}
 		  } else { //if the node to delete has two children
 			//get its successor (the smaller element of the right subtree)
@@ -457,10 +458,10 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 			originalColor = successor.color;
 			toRemove.value = successor.getValue();
 			successor.delete(successor.getValue());
-			possibileTreeRuleBreaker = successor;
+			childToTransplant = successor;
 		  }
 		  if (originalColor == RBColor.BLACK) {
-			possibileTreeRuleBreaker.fixDelete();
+			childToTransplant.fixDelete();
 		  }
 		}
 	  //TODO return the new node frow where the method is called (not the root)
