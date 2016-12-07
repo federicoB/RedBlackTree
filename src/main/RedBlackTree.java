@@ -13,8 +13,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     /**
      * The value of the node.
      */
-	private ItemType value;
-  /**
+    private ItemType value;
+    /**
      * The parent tree.
      */
     private RedBlackTree<ItemType> parent;
@@ -168,6 +168,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return ItemType: the tree that cointans the the minimum item of the tree.
      */
     public RedBlackTree<ItemType> min() {
+        //TODO also add case where leftchild is null (min called on nulleaf)
         if (this.leftChild == nullLeaf) return this;
         else return this.leftChild.min();
     }
@@ -178,6 +179,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return ItemType: the tree that cointans the the maximum item of the tree.
      */
     public RedBlackTree<ItemType> max() {
+        //TODO also add case where rightchild is null (max called on nulleaf)
         if (this.rightChild == nullLeaf) return this;
         else return this.rightChild.max();
     }
@@ -201,13 +203,13 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //if the current value is grater than the item
             if (comparison > 0) {
                 //create a new node/tree on the leftchild
-			  possibleParentNode.leftChild = new RedBlackTree<>(item, possibleParentNode);
-			  //balance the leftchild
+                possibleParentNode.leftChild = new RedBlackTree<>(item, possibleParentNode);
+                //balance the leftchild
                 possibleParentNode.leftChild.balance();
             } else {
                 //create a new node/tree on the rightchild
-			  possibleParentNode.rightChild = new RedBlackTree<>(item, possibleParentNode);
-			  //balance the rightchild
+                possibleParentNode.rightChild = new RedBlackTree<>(item, possibleParentNode);
+                //balance the rightchild
                 possibleParentNode.rightChild.balance();
             }
         }
@@ -219,6 +221,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     /**
      * Rotate the rightsubtree to the left.<br>
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
+     * Call it on the rotation's pivot.
      *
      * @return RedBlackTree<ItemType>: the new root of the tree
      * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
@@ -293,6 +296,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 } else {
                     //change the parent rightchild
                     parent.rightChild = leftChild;
+
                 }
             }
             //return the new root of the tree if the rotation happened
@@ -362,8 +366,8 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     if (uncle.color == RBColor.RED) {
                         //set parent and uncle to black
                         parent.color = uncle.color = RBColor.BLACK;
-					  //set the grandparent on red.This can cause breaking rules
-					  grandParent.color = RBColor.RED;
+                        //set the grandparent on red.This can cause breaking rules
+                        grandParent.color = RBColor.RED;
                         //so call balance on grandparent
                         grandParent.balance();
                     }
@@ -424,151 +428,79 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     public RedBlackTree<ItemType> delete(ItemType itemToDelete) {
         //get the node to delete
         RedBlackTree<ItemType> toRemove = lookUpNode(itemToDelete);
+        //create a variable for keep track of a the child node to use as replacer of the node to delete
+        RedBlackTree<ItemType> replacer = this;
         //if the node to delete is found
         if (toRemove != null) {
-            //save it original color
-            RBColor originalColor = toRemove.color;
-		  //create a variable for keep track of a the child node to transplant into node to delete
-		  RedBlackTree<ItemType> childToTransplant;
-		  //if the node has only one or zero child
-		  if (toRemove.leftChild == nullLeaf || toRemove.rightChild == nullLeaf) {
-			//set the not-null child to a transplant child
-			childToTransplant = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
-			//transplant the child into parent. The child could also be null
-			trasplant(toRemove, childToTransplant);
-			//if the node to remove was black and is replaced by a red node
-			if ((toRemove.color == RBColor.BLACK) && (childToTransplant.color == RBColor.RED)) {
-			  //paint it black
-			  childToTransplant.color = RBColor.BLACK;
-			}
-			//return the changed tree
-			//if the current node is different for the replacer node
-			if (this != childToTransplant) {
-			  //return the current node
-			  return this;
-			} else {
-			  //otherwise return the new root that is the transplant child
-			  return childToTransplant;
-			}
-		  } else { //if the node to delete has two children
-			//get its successor (the smaller element of the right subtree)
-			RedBlackTree<ItemType> successor = toRemove.rightChild.min();
-                //we need to trasplant the successor into the position to the node to remove but first we need to make some preparation.
-                //save the successor color
-			originalColor = successor.color;
-			toRemove.value = successor.getValue();
-			successor.delete(successor.getValue());
-			childToTransplant = successor;
-		  }
-		  if (originalColor == RBColor.BLACK) {
-			childToTransplant.fixDelete();
-		  }
-		}
-	  //TODO return the new node frow where the method is called (not the root)
-	  return this;
-	}
+            //if the node has only one or zero child
+            if (toRemove.leftChild == nullLeaf || toRemove.rightChild == nullLeaf) {
+                //set the not-null child to a transplant child
+                replacer = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
+                trasplant(toRemove, replacer);
+                replacer.fixDelete(toRemove);
+            } else { //if the node to delete has two children
+                //get its successor (the smaller element of the right subtree)
+                RedBlackTree<ItemType> childToDelete = toRemove.rightChild.min();
+                //copy ONLY the value
+                this.value = childToDelete.value;
+                //remove the cloned child, this will end up to zero or one child
+                toRemove.delete(childToDelete.value);
+            }
+        }
+        //return the changed tree
+        //if the current node is different for the replacer node
+        if (this != replacer) {
+            //return the current node
+            return this;
+        } else {
+            //otherwise return the new root that is the transplant child
+            return replacer;
+        }
+    }
 
     /**
      * Call this on a node after a rotation for check and rebalance the tree.
      * It check if the red-black tree rules are respected.
+     *
+     * @param toDelete
      */
-    private void fixDelete() {
-        //if the current node is not the root and is color is black
-        if (this.parent != null && this.color == RBColor.BLACK) {
-            //declare an uncle node
-            RedBlackTree<ItemType> uncle;
-            //if we are the leftchild of our parent
-            if (this == this.parent.leftChild) {
-                //the uncle is our parent righchild
-                uncle = this.parent.rightChild;
-                //if the uncle color is red
-                if (uncle.color == RBColor.RED) {
-                    //now the uncle color is black
-                    uncle.color = RBColor.BLACK;
-                    //the parent color is red
-                    this.parent.color = RBColor.RED;
-                    //rotate left, current node become parent, parent become our left children and uncle its left children
-                    this.parent.rotateleft();
-                    //redefine the uncle after the rotation
-                    uncle = this.parent.rightChild;
-                }
-                //if the new uncle have two black children
-                if (uncle.leftChild.color == RBColor.BLACK && uncle.rightChild.color == RBColor.BLACK) {
-                    //the color of the uncle should be black for decrease black height
+    private void fixDelete(RedBlackTree<ItemType> toDelete) {
+        //If either u or v is red
+        if (((toDelete.color == RBColor.BLACK) && (this.color == RBColor.RED))
+                || ((toDelete.color == RBColor.RED) && (this.color == RBColor.BLACK))) {
+            this.color = RBColor.BLACK;
+        } else if ((toDelete.color == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
+            RedBlackTree<ItemType> uncle = this.getSibiling();
+            if (uncle.color == RBColor.BLACK) {
+                RedBlackTree<ItemType> uncleRedChild;
+                //get the red children of the uncle (if exist)
+                uncleRedChild = (uncle.leftChild.color == RBColor.RED) ? uncle.leftChild : ((uncle.rightChild.color == RBColor.RED) ? uncle.rightChild : null);
+                if (uncleRedChild != null) {
+                    if (uncle.parent.leftChild == uncle) { //uncle is a leftchildren
+                        if (uncle.leftChild == uncleRedChild || uncleRedChild.getSibiling().color == RBColor.RED) {
+
+                        } else {
+
+                        }
+                    } else { //uncle is a rightchildren
+                        if (uncle.rightChild == uncleRedChild || uncleRedChild.getSibiling().color == RBColor.RED) {
+                            parent.rotateleft();
+                        } else {
+
+                        }
+                    }
+                } else {
                     uncle.color = RBColor.RED;
-                    //cal fixdelete on parent.
-                    this.parent.fixDelete();
-                    //if the uncle righchild color is black
-                } else if (uncle.rightChild.color == RBColor.BLACK) {
-                    //set the uncle leftchild color to black
-                    uncle.leftChild.color = RBColor.BLACK;
-                    //set the uncle color to red
-                    uncle.color = RBColor.RED;
-                    //make a right rotation on uncle
-                    uncle.rotateRight();
-                    //redefine the uncle after the rotation
-                    uncle = this.parent.rightChild;
                 }
-                //now the uncle color must be our parent color
-                uncle.color = this.parent.color;
-                //the color of the parent must be black
-                this.parent.color = RBColor.BLACK;
-                //the uncle rightchild color must be black
-                uncle.rightChild.color = RBColor.BLACK;
-                //make a left roation on parent
-                this.parent.rotateleft();
-                //call fixdelete on root
-                this.getRoot().fixDelete();
             } else {
-                //simmetric case
-                //the uncle is our parent leftchild
-                uncle = this.parent.leftChild;
-                //if the uncle color is red
-                if (uncle.color == RBColor.RED) {
-                    //set the uncle color to black
-                    uncle.color = RBColor.BLACK;
-                    //set the parent color to red
-                    this.parent.color = RBColor.RED;
-                    //rotate right, current node become parent, parente become our children and uncle paren'ts children
-                    this.parent.rotateRight();
-                    //redefine the uncle after the rotation
-                    uncle = this.parent.leftChild;
-                }
-                //if the new uncle have two black children
-                if (uncle.rightChild.color == RBColor.BLACK && uncle.leftChild.color == RBColor.BLACK) {
-                    //the color of the uncle should be black for decrease black height
-                    uncle.color = RBColor.RED;
-                    //call fixdelete on parent
-                    this.parent.fixDelete();
-                    //if the uncle leftchild color is black
-                } else if (uncle.leftChild.color == RBColor.BLACK) {
-                    //set the uncle rightchild color to black
-                    uncle.rightChild.color = RBColor.BLACK;
-                    //set the uncle color to red
-                    uncle.color = RBColor.RED;
-                    //make a left rotation on uncle
-                    uncle.rotateleft();
-                    //redefine the uncle after the rotation
-                    uncle = this.parent.leftChild;
-                }
-                //now the uncle color must be our parent color
-                uncle.color = this.parent.color;
-                //the color of the parent must be black
-                this.parent.color = RBColor.BLACK;
-                //the uncle leftchild color should be black
-                uncle.leftChild.color = RBColor.BLACK;
-                //make a right rotation on parent
-                this.parent.rotateRight();
-                //call fixdelete on root
-                this.getRoot().fixDelete();
+                //uncle is red so it has two black children
             }
         }
-        //set the color of this node on black.
-        this.color = RBColor.BLACK;
     }
 
     /**
      * Get the height of the tree. The max distance between the root and a leaf.
+     *
      * @return int: the height of the tree.
      */
     int getHeight() {
