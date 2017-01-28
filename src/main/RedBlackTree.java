@@ -428,7 +428,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     public RedBlackTree<ItemType> delete(ItemType itemToDelete) {
         //get the node to delete
         RedBlackTree<ItemType> toRemove = lookUpNode(itemToDelete);
-        //create a variable for keep track of a the child node to use as replacer of the node to delete
+        //create a variable for keep track of a child node to use as replacer of the node to delete
         RedBlackTree<ItemType> replacer = this;
         //if the node to delete is found
         if (toRemove != null) {
@@ -442,7 +442,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //get its successor (the smaller element of the right subtree)
                 RedBlackTree<ItemType> childToDelete = toRemove.rightChild.min();
                 //copy ONLY the value
-                this.value = childToDelete.value;
+                toRemove.value = childToDelete.value;
                 //remove the cloned child, this will end up to zero or one child
                 toRemove.delete(childToDelete.value);
             }
@@ -468,14 +468,18 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         //If either u or v is red
         if (((toDelete.color == RBColor.BLACK) && (this.color == RBColor.RED))
                 || ((toDelete.color == RBColor.RED) && (this.color == RBColor.BLACK))) {
+            //paint it black. This doesn't change black height
             this.color = RBColor.BLACK;
+            //else if both nodes are black
         } else if ((toDelete.color == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
+            //black height has changed. node "this" is double black
             RedBlackTree<ItemType> uncle = this.getSibiling();
             if (uncle.color == RBColor.BLACK) {
                 RedBlackTree<ItemType> uncleRedChild;
                 //get the red children of the uncle (if exist)
                 uncleRedChild = (uncle.leftChild.color == RBColor.RED) ? uncle.leftChild : ((uncle.rightChild.color == RBColor.RED) ? uncle.rightChild : null);
                 if (uncleRedChild != null) {
+                    //restructuring
                     if (uncle.parent.leftChild == uncle) { //uncle is a leftchildren
                         if (uncle.leftChild == uncleRedChild || uncleRedChild.getSibiling().color == RBColor.RED) {
 
@@ -483,14 +487,21 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
                         }
                     } else { //uncle is a rightchildren
-                        if (uncle.rightChild == uncleRedChild || uncleRedChild.getSibiling().color == RBColor.RED) {
+                        if (uncle.rightChild == uncleRedChild) {
                             parent.rotateleft();
+                            uncleRedChild.color = RBColor.BLACK;
                         } else {
-
+                            parent.rightChild = nullLeaf;
+                            uncleRedChild.leftChild = parent;
+                            uncleRedChild.rightChild = uncle;
+                            uncleRedChild.color = RBColor.BLACK;
+                            uncle.leftChild = nullLeaf;
                         }
                     }
                 } else {
-                    uncle.color = RBColor.RED;
+                    uncle.color = RBColor.RED; //recoloring
+                    //the parent is now "double black"
+                    //this.parent.fixDelete();
                 }
             } else {
                 //uncle is red so it has two black children
