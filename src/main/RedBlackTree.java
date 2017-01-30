@@ -481,16 +481,23 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 if (uncleRedChild != null) {
                     //restructuring
                     if (uncle.parent.leftChild == uncle) { //uncle is a leftchildren
-                        if (uncle.leftChild == uncleRedChild || uncleRedChild.getSibiling().color == RBColor.RED) {
-
+                        if (uncle.leftChild == uncleRedChild) {
+                            parent.rotateRight();
+                            uncleRedChild.color = RBColor.BLACK;
                         } else {
-
+                            //uncle rightchild is red. uncle leftchild can be black or red, it doesn't matter
+                            parent.leftChild = nullLeaf;
+                            uncleRedChild.rightChild = parent;
+                            uncleRedChild.leftChild = uncle;
+                            uncleRedChild.color = RBColor.BLACK;
+                            uncle.rightChild = nullLeaf;
                         }
                     } else { //uncle is a rightchildren
                         if (uncle.rightChild == uncleRedChild) {
                             parent.rotateleft();
                             uncleRedChild.color = RBColor.BLACK;
                         } else {
+                            //uncle leftchild is red. uncle rightchild can be black or red, it doesn't matter
                             parent.rightChild = nullLeaf;
                             uncleRedChild.leftChild = parent;
                             uncleRedChild.rightChild = uncle;
