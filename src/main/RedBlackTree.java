@@ -444,7 +444,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //copy ONLY the value
                 toRemove.value = childToDelete.value;
                 //remove the cloned child, this will end up to zero or one child
-                toRemove.delete(childToDelete.value);
+                childToDelete.delete(childToDelete.value);
             }
         }
         //return the changed tree
@@ -506,12 +506,22 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                         }
                     }
                 } else {
-                    uncle.color = RBColor.RED; //recoloring
-                    //the parent is now "double black"
-                    //this.parent.fixDelete();
+                    //recoloring
+                    uncle.color = RBColor.RED;
+                    if (parent.color == RBColor.RED) {
+                        parent.color = RBColor.BLACK;
+                    } else {
+                        //else if the parent is black
+                        //the parent is now "double black"
+                        parent.fixDelete(parent);
+                    }
                 }
             } else {
                 //uncle is red so it has two black children
+                parent.rotateRight();
+                uncle.color = RBColor.BLACK;
+                parent.color = RBColor.RED;
+                this.fixDelete(toDelete);
             }
         }
     }
