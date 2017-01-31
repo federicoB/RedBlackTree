@@ -408,15 +408,17 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     private void trasplant(RedBlackTree<ItemType> toRemove, RedBlackTree<ItemType> toInsert) {
+        //save the parent in a variable
+        RedBlackTree<ItemType> parent = toRemove.parent;
         //if the node to remove have a parent we need do change references
-        if (toRemove.parent != null) {
-            //save the parent in a variable
-            RedBlackTree<ItemType> parent = toRemove.parent;
+        if (parent != null) {
             //if the nodeToRemove is a leftchild set the new leftchild
             if (parent.leftChild == toRemove) parent.leftChild = toInsert;
                 //do the opposite if the node to remove is a rightchild
             else parent.rightChild = toInsert;
         }
+        //set the correct parent in the node to insert
+        toInsert.parent = parent;
     }
 
     /**
@@ -437,7 +439,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //set the not-null child to a transplant child
                 replacer = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
                 trasplant(toRemove, replacer);
-                replacer.fixDelete(toRemove);
+                replacer.fixDelete(toRemove.color);
             } else { //if the node to delete has two children
                 //get its successor (the smaller element of the right subtree)
                 RedBlackTree<ItemType> childToDelete = toRemove.rightChild.min();
@@ -462,16 +464,16 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * Call this on a node after a rotation for check and rebalance the tree.
      * It check if the red-black tree rules are respected.
      *
-     * @param toDelete
+     * @param toDeleteColor
      */
-    private void fixDelete(RedBlackTree<ItemType> toDelete) {
+    private void fixDelete(RBColor toDeleteColor) {
         //If either u or v is red
-        if (((toDelete.color == RBColor.BLACK) && (this.color == RBColor.RED))
-                || ((toDelete.color == RBColor.RED) && (this.color == RBColor.BLACK))) {
+        if (((toDeleteColor == RBColor.BLACK) && (this.color == RBColor.RED))
+                || ((toDeleteColor == RBColor.RED) && (this.color == RBColor.BLACK))) {
             //paint it black. This doesn't change black height
             this.color = RBColor.BLACK;
             //else if both nodes are black
-        } else if ((toDelete.color == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
+        } else if ((toDeleteColor == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
             //black height has changed. node "this" is double black
             RedBlackTree<ItemType> uncle = this.getSibiling();
             if (uncle.color == RBColor.BLACK) {
@@ -513,7 +515,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     } else {
                         //else if the parent is black
                         //the parent is now "double black"
-                        parent.fixDelete(parent);
+                        parent.fixDelete(parent.color);
                     }
                 }
             } else {
@@ -521,7 +523,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 parent.rotateRight();
                 uncle.color = RBColor.BLACK;
                 parent.color = RBColor.RED;
-                this.fixDelete(toDelete);
+                this.fixDelete(toDeleteColor);
             }
         }
     }
