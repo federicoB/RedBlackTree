@@ -480,14 +480,15 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     if (uncle.parent.leftChild == uncle) { //uncle is a leftchildren
                         if (uncle.rightChild == uncleRedChild) {
                             //uncle rightchild is red. uncle leftchild can be black or red, it doesn't matter
-                            parent.leftChild = nullLeaf;
+                            parent.leftChild = uncleRedChild.rightChild;
+                            uncleRedChild.rightChild.parent = parent;
                             uncleRedChild.rightChild = parent;
                             uncleRedChild.parent = parent.parent;
                             parent.parent = uncleRedChild;
+                            uncle.rightChild = uncleRedChild.leftChild;
                             uncleRedChild.leftChild = uncle;
                             uncle.parent = uncleRedChild;
                             uncleRedChild.color = RBColor.BLACK;
-                            uncle.rightChild = nullLeaf;
                         } else {
                             parent.rotateRight();
                             uncleRedChild.color = RBColor.BLACK;
@@ -495,14 +496,16 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     } else { //uncle is a rightchildren
                         if (uncle.leftChild == uncleRedChild) {
                             //uncle leftchild is red. uncle rightchild can be black or red, it doesn't matter
-                            parent.rightChild = nullLeaf;
+                            parent.rightChild = uncleRedChild.leftChild;
+                            uncleRedChild.parent = parent;
                             uncleRedChild.leftChild = parent;
                             uncleRedChild.parent = parent.parent;
                             parent.parent = uncleRedChild;
+                            uncle.leftChild = uncleRedChild.rightChild;
+                            uncleRedChild.rightChild.parent = uncle;
                             uncleRedChild.rightChild = uncle;
                             uncle.parent = uncleRedChild;
                             uncleRedChild.color = RBColor.BLACK;
-                            uncle.leftChild = nullLeaf;
                         } else {
                             parent.rotateleft();
                             uncleRedChild.color = RBColor.BLACK;

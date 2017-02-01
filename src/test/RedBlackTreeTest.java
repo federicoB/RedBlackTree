@@ -10,7 +10,7 @@ import static java.lang.Math.log;
 
 public class RedBlackTreeTest {
 
-    private final int treeSize = 11;
+    private final int treeSize = 128;
   private RedBlackTree<Integer> tree;
     private int[] numbers;
 
