@@ -442,7 +442,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //set the not-null child to a transplant child
                 replacer = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
                 //if the node is not the last element of the tree
-                if (!(replacer == nullLeaf) && (toRemove.parent == null)) {
+                if (replacer != nullLeaf || toRemove.parent != null) {
                     trasplant(toRemove, replacer);
                     replacer.fixDelete(toRemove.color);
                 }
