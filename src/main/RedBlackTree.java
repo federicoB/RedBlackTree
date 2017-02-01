@@ -130,7 +130,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         //find the node with the searched value of the nearest
         RedBlackTree<ItemType> result = this.find(item);
         //if the node found has the value searched the item is in the tree.
-        if (result.getValue() == item) return result;
+        if (result.getValue().compareTo(item) == 0) return result;
             //otherwise return null
         else return null;
     }
