@@ -424,24 +424,28 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
      * Delete a node from the tree containing the given value
-     *  It returns alwais the root of the tree. It is discouraged to call delete on a subtree.
+     * It returns alwais the root of the tree. It is discouraged to call delete on a subtree.
+     * It not possible to entirely delete a tree. At least an element must be present.
+     *
      * @param itemToDelete the item to delete from the tree.
      * @return RedBlackTree<ItemType>: the new root of the tree.
      */
-    public RedBlackTree<ItemType> delete(ItemType itemToDelete) throws RootDeletionException {
-        //if (this.value==itemToDelete) throw new RootDeletionException();
+    public RedBlackTree<ItemType> delete(ItemType itemToDelete) {
         //get the node to delete
         RedBlackTree<ItemType> toRemove = lookUpNode(itemToDelete);
         //create a variable for keep track of a child node to use as replacer of the node to delete
         RedBlackTree<ItemType> replacer = this;
-        //if the node to delete is found
+        //if the node to delete is found and the node is not the last element of the tree
         if (toRemove != null) {
             //if the node has only one or zero child
             if (toRemove.leftChild == nullLeaf || toRemove.rightChild == nullLeaf) {
                 //set the not-null child to a transplant child
                 replacer = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
-                trasplant(toRemove, replacer);
-                replacer.fixDelete(toRemove.color);
+                //if the node is not the last element of the tree
+                if (!(replacer == nullLeaf) && (toRemove.parent == null)) {
+                    trasplant(toRemove, replacer);
+                    replacer.fixDelete(toRemove.color);
+                }
             } else { //if the node to delete has two children
                 //get its successor (the smaller element of the right subtree)
                 RedBlackTree<ItemType> childToDelete = toRemove.rightChild.min();
@@ -578,12 +582,6 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      */
     private enum RBColor {
         BLACK, RED
-    }
-
-    public static class RootDeletionException extends Exception {
-        public RootDeletionException() {
-            super("Root element cannot be deleted, the tree must have at least one element");
-        }
     }
 
 

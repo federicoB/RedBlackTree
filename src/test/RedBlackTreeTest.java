@@ -57,12 +57,8 @@ public class RedBlackTreeTest {
   @Test
   public void testDelete() throws Exception {
       for (int i = 0; i < treeSize - 1; ++i) {
-          try {
-              tree = tree.delete(numbers[i]);
-              Assert.assertFalse(tree.contains(numbers[i]));
-          } catch (RedBlackTree.RootDeletionException ex) {
-              System.out.println(ex.getMessage());
-          }
+          tree = tree.delete(numbers[i]);
+          Assert.assertFalse(tree.contains(numbers[i]));
           int height = tree.getHeight();
           double expectedHeight = (2 * (log(treeSize - i + 1) / log(2)));
           Assert.assertTrue(height <= expectedHeight);
