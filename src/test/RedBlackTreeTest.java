@@ -10,7 +10,7 @@ import static java.lang.Math.log;
 
 public class RedBlackTreeTest {
 
-    private final int treeSize = 1;
+    private final int treeSize = 11;
   private RedBlackTree<Integer> tree;
     private int[] numbers;
 
@@ -56,9 +56,13 @@ public class RedBlackTreeTest {
 
   @Test
   public void testDelete() throws Exception {
-      for (int i = 0; i < treeSize; ++i) {
-          tree = tree.delete(numbers[i]);
-          Assert.assertFalse(tree.contains(numbers[i]));
+      for (int i = 0; i < treeSize - 1; ++i) {
+          try {
+              tree = tree.delete(numbers[i]);
+              Assert.assertFalse(tree.contains(numbers[i]));
+          } catch (RedBlackTree.RootDeletionException ex) {
+              System.out.println(ex.getMessage());
+          }
           int height = tree.getHeight();
           double expectedHeight = (2 * (log(treeSize - i + 1) / log(2)));
           Assert.assertTrue(height <= expectedHeight);

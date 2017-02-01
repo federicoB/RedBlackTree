@@ -60,6 +60,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         this.color = RBColor.BLACK;
         this.leftChild = null;
         this.rightChild = null;
+        this.nullLeaf = this;
     }
 
     /**
@@ -266,7 +267,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * Rotate the rightsubtree to the left.<br>
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
      *
-     * @return RedBlackTree<ItemType>: the sibiling of the current tree.
+     * @return RedBlackTree<ItemType>: the new root of the tree
      * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
      */
     private RedBlackTree<ItemType> rotateRight() {
@@ -423,11 +424,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
      * Delete a node from the tree containing the given value
-     *
+     *  It returns alwais the root of the tree. It is discouraged to call delete on a subtree.
      * @param itemToDelete the item to delete from the tree.
      * @return RedBlackTree<ItemType>: the new root of the tree.
      */
-    public RedBlackTree<ItemType> delete(ItemType itemToDelete) {
+    public RedBlackTree<ItemType> delete(ItemType itemToDelete) throws RootDeletionException {
+        //if (this.value==itemToDelete) throw new RootDeletionException();
         //get the node to delete
         RedBlackTree<ItemType> toRemove = lookUpNode(itemToDelete);
         //create a variable for keep track of a child node to use as replacer of the node to delete
@@ -450,14 +452,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             }
         }
         //return the changed tree
-        //if the current node is different for the replacer node
-        if (this != replacer) {
-            //return the current node
-            return this;
-        } else {
-            //otherwise return the new root that is the transplant child
-            return replacer;
-        }
+        return replacer.getRoot();
     }
 
     /**
@@ -483,28 +478,34 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 if (uncleRedChild != null) {
                     //restructuring
                     if (uncle.parent.leftChild == uncle) { //uncle is a leftchildren
-                        if (uncle.leftChild == uncleRedChild) {
-                            parent.rotateRight();
-                            uncleRedChild.color = RBColor.BLACK;
-                        } else {
+                        if (uncle.rightChild == uncleRedChild) {
                             //uncle rightchild is red. uncle leftchild can be black or red, it doesn't matter
                             parent.leftChild = nullLeaf;
                             uncleRedChild.rightChild = parent;
+                            uncleRedChild.parent = parent.parent;
+                            parent.parent = uncleRedChild;
                             uncleRedChild.leftChild = uncle;
+                            uncle.parent = uncleRedChild;
                             uncleRedChild.color = RBColor.BLACK;
                             uncle.rightChild = nullLeaf;
+                        } else {
+                            parent.rotateRight();
+                            uncleRedChild.color = RBColor.BLACK;
                         }
                     } else { //uncle is a rightchildren
-                        if (uncle.rightChild == uncleRedChild) {
-                            parent.rotateleft();
-                            uncleRedChild.color = RBColor.BLACK;
-                        } else {
+                        if (uncle.leftChild == uncleRedChild) {
                             //uncle leftchild is red. uncle rightchild can be black or red, it doesn't matter
                             parent.rightChild = nullLeaf;
                             uncleRedChild.leftChild = parent;
+                            uncleRedChild.parent = parent.parent;
+                            parent.parent = uncleRedChild;
                             uncleRedChild.rightChild = uncle;
+                            uncle.parent = uncleRedChild;
                             uncleRedChild.color = RBColor.BLACK;
                             uncle.leftChild = nullLeaf;
+                        } else {
+                            parent.rotateleft();
+                            uncleRedChild.color = RBColor.BLACK;
                         }
                     }
                 } else {
@@ -515,12 +516,14 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     } else {
                         //else if the parent is black
                         //the parent is now "double black"
-                        parent.fixDelete(parent.color);
+                        if (parent.parent != null) {
+                            parent.fixDelete(parent.color);
+                        }
                     }
                 }
             } else {
                 //uncle is red so it has two black children
-                parent.rotateRight();
+                parent.rotateleft();
                 uncle.color = RBColor.BLACK;
                 parent.color = RBColor.RED;
                 this.fixDelete(toDeleteColor);
@@ -572,6 +575,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      */
     private enum RBColor {
         BLACK, RED
+    }
+
+    public static class RootDeletionException extends Exception {
+        public RootDeletionException() {
+            super("Root element cannot be deleted, the tree must have at least one element");
+        }
     }
 
 
