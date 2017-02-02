@@ -169,7 +169,6 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return ItemType: the tree that cointans the the minimum item of the tree.
      */
     public RedBlackTree<ItemType> min() {
-        //TODO also add case where leftchild is null (min called on nulleaf)
         if (this.leftChild == nullLeaf) return this;
         else return this.leftChild.min();
     }
@@ -180,7 +179,6 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return ItemType: the tree that cointans the the maximum item of the tree.
      */
     public RedBlackTree<ItemType> max() {
-        //TODO also add case where rightchild is null (max called on nulleaf)
         if (this.rightChild == nullLeaf) return this;
         else return this.rightChild.max();
     }
@@ -556,36 +554,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return int: the height of the tree.
      */
     int getHeight() {
-        //TODO maybe not the best complexity, can be improved
-        //initialize a counter for left child height
-        int leftheight = 1;
-        //initialize a counter for right child height
-        int rightheight = 1;
-        //if the leftchild and the rightchild doesn't exist
-        if (leftChild == nullLeaf && rightChild == nullLeaf) {
-            //return the heigth of the current node, that is one
-            return 1;
-            //if a child exist
-        } else {
-            //if leftchild exist
-            if (leftChild != nullLeaf) {
-                //sum the height of the leftchild
-                leftheight += this.leftChild.getHeight();
-            }
-            //if the rightchild exist
-            if (rightChild != nullLeaf) {
-                //sum the height of the rightchild
-                rightheight += this.rightChild.getHeight();
-            }
-            //if the leftheight is greater than the rightheight
-            if (leftheight > rightheight) {
-                //return the leftheight
-                return leftheight;
-            } else {
-                //otherwise return the rightheight
-                return rightheight;
-            }
-        }
+        //nullleaf has height 0, other nodes has height 1 + max of childs height
+        if (this == nullLeaf) return 0;
+        else return 1 + Math.max(leftChild.getHeight(), rightChild.getHeight());
     }
 
 
