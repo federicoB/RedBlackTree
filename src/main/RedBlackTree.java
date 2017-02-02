@@ -1,5 +1,19 @@
-/**
+/*
  * Created by Federico Bertani on 13/03/16.
+ * Copyright (c) 2016 Federico Bertani
+ * This file is part of RedBlackTree.
+ * RedBlackTree is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -85,7 +99,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Get the value cointained in the node.
+     * Get the value contained in the node.
      *
      * @return ItemType: the value of the node.
      */
@@ -110,9 +124,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             if (this.leftChild == nullLeaf) return this;
                 //but if the leftchild exist call lookup on him
             else return this.leftChild.find(item);
-            //if the node value in greter of the searched instead
+            //if the node value in greater of the searched instead
         } else {
-            //but the rightchil doesn't exist return this
+            //but the rightchild doesn't exist return this
             if (this.rightChild == nullLeaf) return this;
                 //but if the leftchild exist call lookup on him
             else return this.rightChild.find(item);
@@ -138,7 +152,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * Check if an item is in the tree or not.
      *
      * @param item ItemType: the item to search
-     * @return boolean: true if the item is constained in the tree false otherwise.
+     * @return boolean: true if the item is contained in the tree false otherwise.
      */
     public boolean contains(ItemType item) {
         return (this.lookUpNode(item) != null);
@@ -163,9 +177,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Get the tree that cointans the minimum item of the tree.
+     * Get the tree that contains the minimum item of the tree.
      *
-     * @return ItemType: the tree that cointans the the minimum item of the tree.
+     * @return ItemType: the tree that contains the the minimum item of the tree.
      */
     public RedBlackTree<ItemType> min() {
         if (this.leftChild == nullLeaf) return this;
@@ -173,9 +187,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Get the tree that cointans the maximum item of the tree.
+     * Get the tree that contains the maximum item of the tree.
      *
-     * @return ItemType: the tree that cointans the the maximum item of the tree.
+     * @return ItemType: the tree that contains the the maximum item of the tree.
      */
     public RedBlackTree<ItemType> max() {
         if (this.rightChild == nullLeaf) return this;
@@ -190,9 +204,9 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return RedBlackTree<ItemType>: the new root of the tree.
      */
     public RedBlackTree<ItemType> insert(ItemType item) {
-        //get the possibile parent node is the item don't exist already in the tree
+        //get the possible parent node is the item don't exist already in the tree
         RedBlackTree<ItemType> possibleParentNode = find(item);
-        //get the value of this possibile parent node
+        //get the value of this possible parent node
         ItemType nodeValue = possibleParentNode.getValue();
         //if the value is different from the value to insert this means that the searched node is the nearest(successor or predecessor) to the future position of the inserted node.
         if (nodeValue != item) {
@@ -217,21 +231,21 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Rotate the rightsubtree to the left.<br>
+     * Rotate the right sub-tree to the left.<br>
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
      * Call it on the rotation's pivot.
      *
      * @return RedBlackTree<ItemType>: the new root of the tree
      * @see <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a>
      */
-    private RedBlackTree<ItemType> rotateleft() {
+    private RedBlackTree<ItemType> rotateLeft() {
         //if the node has a rightchild
         if (this.rightChild != null) {
             //get the rightchild
             RedBlackTree<ItemType> rightChild = this.rightChild;
             //get the parent
             RedBlackTree<ItemType> parent = this.parent;
-            //substitute the rightchild with the richilds's leftchild
+            //substitute the rightchild with the rightchild's leftchild
             this.rightChild = rightChild.leftChild;
             //if the rightchild's leftchild exist set its parent to the current node
             if (rightChild.leftChild != null) rightChild.leftChild.parent = this;
@@ -261,7 +275,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Rotate the rightsubtree to the left.<br>
+     * Rotate the right sub-tree to the left.<br>
      * <a href="https://upload.wikimedia.org/wikipedia/commons/2/23/Tree_rotation.png">image</a> for better explanation.
      *
      * @return RedBlackTree<ItemType>: the new root of the tree
@@ -305,28 +319,28 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Gets the sibiling of the current tree.
+     * Gets the sibling of the current tree.
      * For example the rightchild if the current tree is a leftchild or the opposite if the current tree is a rightchild.
      *
-     * @return RedBlackTree<ItemType>: the sibiling of the current tree.
+     * @return RedBlackTree<ItemType>: the sibling of the current tree.
      */
-    private RedBlackTree<ItemType> getSibiling() {
-        //create an initial sibiling with null value
-        RedBlackTree<ItemType> sibiling = null;
+    private RedBlackTree<ItemType> getSibling() {
+        //create an initial sibling with null value
+        RedBlackTree<ItemType> sibling = null;
         //check if the parent of the current node is not null
         if (this.parent != null) {
             //check if the leftchild of the parent exist and if it's the current node
             if (this.parent.leftChild != null && this.parent.leftChild == this) {
-                //if it is then the sibiling will be the rightchild
-                sibiling = this.parent.rightChild;
+                //if it is then the sibling will be the rightchild
+                sibling = this.parent.rightChild;
                 //if the rightchild doesn't exist it's not a problem
             } else {
-                //otherwise it will be the lefchild
-                sibiling = this.parent.leftChild;
+                //otherwise it will be the leftchild
+                sibling = this.parent.leftChild;
                 //if the leftchild doesn't exist it's not a problem
             }
         }
-        return sibiling;
+        return sibling;
     }
 
     /**
@@ -342,7 +356,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     /**
      * Balance the tree.
      * In this way all operation are made in log(N).
-     * For complete reference see <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Insertion"> the wiky page </a>
+     * For complete reference see <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Insertion"> the Wikipedia page </a>
      */
     private void balanceInsertion() {
         //get the parent
@@ -357,7 +371,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //get the grandparent (it always exist if parent is red) (the root can't be red)
                 RedBlackTree<ItemType> grandParent = parent.parent;
                 //get the uncle (if grandparent exist, uncle must exist)
-                RedBlackTree<ItemType> uncle = parent.getSibiling();
+                RedBlackTree<ItemType> uncle = parent.getSibling();
                 //if uncle is red
                 if (uncle.color == RBColor.RED) {
                     //set parent and uncle color to black
@@ -372,7 +386,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     //if we are the rightchild of our parent and his is the leftchild of the grandparent
                     if ((this == parent.rightChild) && (parent == grandParent.leftChild)) {
                         //rotate left
-                        parent = parent.rotateleft();
+                        parent = parent.rotateLeft();
                         //call balance on parent
                         parent.balanceInsertion();
                         //if we are the leftchild of out parent and his is the leftchild of the grandparent
@@ -382,14 +396,14 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                         //call balance on parent
                         parent.balanceInsertion();
                     } else {
-                        //if we are a family of leftchilders
+                        //if we are a family of leftchildren
                         if ((this == parent.leftChild) && (parent == grandParent.leftChild)) {
                             //rotate right on grandparent
                             grandParent.rotateRight();
                             //or if we are a family of rightchilders
                         } else if ((this == parent.rightChild) && (parent == grandParent.rightChild)) {
                             //rotate left on grandparent
-                            grandParent.rotateleft();
+                            grandParent.rotateLeft();
                         }
                         //fix the color of the rotation, set the old grandparent to red
                         //because this and grandparent are now children of parent
@@ -402,7 +416,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             }
     }
 
-    private void trasplant(RedBlackTree<ItemType> toRemove, RedBlackTree<ItemType> toInsert) {
+    private void transplant(RedBlackTree<ItemType> toRemove, RedBlackTree<ItemType> toInsert) {
         //save the parent in a variable
         RedBlackTree<ItemType> parent = toRemove.parent;
         //if the node to remove have a parent we need do change references
@@ -418,7 +432,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
     /**
      * Delete a node from the tree containing the given value
-     * It returns alwais the root of the tree. It is discouraged to call delete on a subtree.
+     * It returns always the root of the tree. It is discouraged to call delete on a subtree.
      * It not possible to entirely delete a tree. At least an element must be present.
      *
      * @param itemToDelete the item to delete from the tree.
@@ -437,7 +451,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 replacer = (toRemove.leftChild == nullLeaf) ? toRemove.rightChild : toRemove.leftChild;
                 //if the node is not the last element of the tree
                 if (replacer != nullLeaf || toRemove.parent != null) {
-                    trasplant(toRemove, replacer);
+                    transplant(toRemove, replacer);
                     replacer.balanceDeletion(toRemove.color);
                 }
             } else { //if the node to delete has two children
@@ -454,7 +468,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
     }
 
     /**
-     * Call this on a node after a rotation for check and rebalance the tree.
+     * Call this on a node after a rotation for check and re-balance the tree.
      * It check if the red-black tree rules are respected.
      *
      * @param deletedColor: the color of the deleted node
@@ -469,56 +483,56 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //else if both nodes are black
         } else if ((deletedColor == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
             //by deletion the black height has changed. node "this" is now "double black"
-            //get the sibiling
-            RedBlackTree<ItemType> sibiling = this.getSibiling();
-            //if the sibiling color is black
-            if (sibiling.color == RBColor.BLACK) {
-                //get the red children of the sibiling
-                RedBlackTree<ItemType> uncleRedChild = (sibiling.leftChild.color == RBColor.RED) ? sibiling.leftChild : ((sibiling.rightChild.color == RBColor.RED) ? sibiling.rightChild : null);
+            //get the sibling
+            RedBlackTree<ItemType> sibling = this.getSibling();
+            //if the sibling color is black
+            if (sibling.color == RBColor.BLACK) {
+                //get the red children of the sibling
+                RedBlackTree<ItemType> uncleRedChild = (sibling.leftChild.color == RBColor.RED) ? sibling.leftChild : ((sibling.rightChild.color == RBColor.RED) ? sibling.rightChild : null);
                 //if a red children exist
                 if (uncleRedChild != null) {
                     //restructuring
-                    //if sibiling is a leftchildren
-                    if (sibiling.parent.leftChild == sibiling) {
-                        //if the red child is a righchild
-                        if (sibiling.rightChild == uncleRedChild) {
-                            //sibiling rightchild is red. sibiling leftchild can be black or red, it doesn't matter
+                    //if sibling is a leftchildren
+                    if (sibling.parent.leftChild == sibling) {
+                        //if the red child is a rightchild
+                        if (sibling.rightChild == uncleRedChild) {
+                            //sibling rightchild is red. sibling leftchild can be black or red, it doesn't matter
                             parent.leftChild = uncleRedChild.rightChild;
                             uncleRedChild.rightChild.parent = parent;
                             uncleRedChild.rightChild = parent;
                             uncleRedChild.parent = parent.parent;
                             parent.parent = uncleRedChild;
-                            sibiling.rightChild = uncleRedChild.leftChild;
-                            uncleRedChild.leftChild.parent = sibiling;
-                            uncleRedChild.leftChild = sibiling;
-                            sibiling.parent = uncleRedChild;
+                            sibling.rightChild = uncleRedChild.leftChild;
+                            uncleRedChild.leftChild.parent = sibling;
+                            uncleRedChild.leftChild = sibling;
+                            sibling.parent = uncleRedChild;
                         } else { //or if is a leftchild
                             parent.rotateRight();
                         }
-                    } else { //or if the sibiling is a rightchildren
+                    } else { //or if the sibling is a rightchildren
                         //if the red child is a leftchild
-                        if (sibiling.leftChild == uncleRedChild) {
-                            //sibiling leftchild is red. sibiling rightchild can be black or red, it doesn't matter
+                        if (sibling.leftChild == uncleRedChild) {
+                            //sibling leftchild is red. sibling rightchild can be black or red, it doesn't matter
                             //symmetric case
                             parent.rightChild = uncleRedChild.leftChild;
                             uncleRedChild.parent = parent;
                             uncleRedChild.leftChild = parent;
                             uncleRedChild.parent = parent.parent;
                             parent.parent = uncleRedChild;
-                            sibiling.leftChild = uncleRedChild.rightChild;
-                            uncleRedChild.rightChild.parent = sibiling;
-                            uncleRedChild.rightChild = sibiling;
-                            sibiling.parent = uncleRedChild;
+                            sibling.leftChild = uncleRedChild.rightChild;
+                            uncleRedChild.rightChild.parent = sibling;
+                            uncleRedChild.rightChild = sibling;
+                            sibling.parent = uncleRedChild;
                         } else { //or if it is a rightchild
-                            parent.rotateleft();
+                            parent.rotateLeft();
                         }
                     }
                     //color compensation, remove "double black" status on this
                     uncleRedChild.color = RBColor.BLACK;
                 } else {
                     //recoloring
-                    //sibiling is black and has two black children
-                    sibiling.color = RBColor.RED;
+                    //sibling is black and has two black children
+                    sibling.color = RBColor.RED;
                     if (parent.color == RBColor.RED) {
                         // a red parent can't have red children so paint it black
                         parent.color = RBColor.BLACK;
@@ -534,11 +548,11 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 }
             } else {
                 //adjustment
-                //sibiling is red so it has two black children
-                parent.rotateleft();
-                //now there is red parent (the old sibiling) with two black children (one is the old parent)
+                //sibling is red so it has two black children
+                parent.rotateLeft();
+                //now there is red parent (the old sibling) with two black children (one is the old parent)
                 //paint the parent black
-                sibiling.color = RBColor.BLACK;
+                sibling.color = RBColor.BLACK;
                 //paint one children red
                 parent.color = RBColor.RED;
                 //color compensation is not happened, this is still double black. Call balance for a recoloring.
@@ -553,7 +567,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * @return int: the height of the tree.
      */
     int getHeight() {
-        //nullleaf has height 0, other nodes has height 1 + max of childs height
+        //nullleaf has height 0, other nodes has height 1 + max of children height
         if (this == nullLeaf) return 0;
         else return 1 + Math.max(leftChild.getHeight(), rightChild.getHeight());
     }
