@@ -206,12 +206,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //create a new node/tree on the leftchild
                 possibleParentNode.leftChild = new RedBlackTree<>(item, possibleParentNode);
                 //balance the leftchild
-                possibleParentNode.leftChild.balance();
+                possibleParentNode.leftChild.balanceInsertion();
             } else {
                 //create a new node/tree on the rightchild
                 possibleParentNode.rightChild = new RedBlackTree<>(item, possibleParentNode);
                 //balance the rightchild
-                possibleParentNode.rightChild.balance();
+                possibleParentNode.rightChild.balanceInsertion();
             }
         }
         //return the root
@@ -347,7 +347,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * In this way all operation are made in log(N).
      * For complete reference see <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Insertion"> the wiky page </a>
      */
-    private void balance() {
+    private void balanceInsertion() {
         //get the parent
         RedBlackTree<ItemType> parent = this.parent;
         //if the node has no parent
@@ -355,56 +355,53 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
             //the node is the root so we have to color it black
             this.color = RBColor.BLACK;
         } else
-            //if parent exist and is black no problem but if is red grandparent must exist //TODO check this
-            if ((parent.color == RBColor.RED) && (parent.parent != null)) {
-                //get the grandparent
+            //if parent exist and is black no problem but it's red some other controls are need to be made
+            if (parent.color == RBColor.RED) {
+                //get the grandparent (it always exist if parent is red) (the root can't be red)
                 RedBlackTree<ItemType> grandParent = parent.parent;
-                //get the uncle
+                //get the uncle (if grandparent exist, uncle must exist)
                 RedBlackTree<ItemType> uncle = parent.getSibiling();
-                //if uncle exist //TODO maybe remove this the uncle always exist
-                if (uncle != null) {
-                    //and is Red
-                    if (uncle.color == RBColor.RED) {
-                        //set parent and uncle to black
-                        parent.color = uncle.color = RBColor.BLACK;
-                        //set the grandparent on red.This can cause breaking rules
-                        grandParent.color = RBColor.RED;
-                        //so call balance on grandparent
-                        grandParent.balance();
-                    }
-                    //if the uncle is not red
-                    else {
-                        //if we are the rightchild of our parent and his is the leftchild of the grandparent
-                        if ((this == parent.rightChild) && (parent == grandParent.leftChild)) {
-                            //rotate left
-                            parent = parent.rotateleft();
-                            //call balance on parent
-                            parent.balance();
-                            //if we are the leftchild of out parent and his is the leftchild of the grandparent
-                        } else if ((this == parent.leftChild) && (parent == grandParent.rightChild)) {
-                            //rotate right
-                            parent = parent.rotateRight();
-                            //call balance on parent
-                            parent.balance();
-                        } else {
-                            //if we are a family of leftchilders
-                            if ((this == parent.leftChild) && (parent == grandParent.leftChild)) {
-                                //rotate right on grandparent
-                                grandParent.rotateRight();
-                                //or if we are a family of rightchilders
-                            } else if ((this == parent.rightChild) && (parent == grandParent.rightChild)) {
-                                //rotate left on grandparent
-                                grandParent.rotateleft();
-                            }
-                            //fix the color of the rotation, set the old grandparent to red
-                            //because this and grandparent are now children of parent
-                            grandParent.color = RBColor.RED;
-                            //and the old parent to black
-                            parent.color = RBColor.BLACK;
-                        }
-                    }
-
+                //if uncle is red
+                if (uncle.color == RBColor.RED) {
+                    //set parent and uncle color to black
+                    parent.color = uncle.color = RBColor.BLACK;
+                    //set the grandparent on red.This can cause breaking rules.
+                    grandParent.color = RBColor.RED;
+                    //so call balance on grandparent
+                    grandParent.balanceInsertion();
                 }
+                //else if the uncle is not red
+                else {
+                    //if we are the rightchild of our parent and his is the leftchild of the grandparent
+                    if ((this == parent.rightChild) && (parent == grandParent.leftChild)) {
+                        //rotate left
+                        parent = parent.rotateleft();
+                        //call balance on parent
+                        parent.balanceInsertion();
+                        //if we are the leftchild of out parent and his is the leftchild of the grandparent
+                    } else if ((this == parent.leftChild) && (parent == grandParent.rightChild)) {
+                        //rotate right
+                        parent = parent.rotateRight();
+                        //call balance on parent
+                        parent.balanceInsertion();
+                    } else {
+                        //if we are a family of leftchilders
+                        if ((this == parent.leftChild) && (parent == grandParent.leftChild)) {
+                            //rotate right on grandparent
+                            grandParent.rotateRight();
+                            //or if we are a family of rightchilders
+                        } else if ((this == parent.rightChild) && (parent == grandParent.rightChild)) {
+                            //rotate left on grandparent
+                            grandParent.rotateleft();
+                        }
+                        //fix the color of the rotation, set the old grandparent to red
+                        //because this and grandparent are now children of parent
+                        grandParent.color = RBColor.RED;
+                        //and the old parent to black
+                        parent.color = RBColor.BLACK;
+                    }
+                }
+
             }
     }
 
