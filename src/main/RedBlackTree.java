@@ -495,15 +495,14 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                             uncleRedChild.leftChild.parent = sibiling;
                             uncleRedChild.leftChild = sibiling;
                             sibiling.parent = uncleRedChild;
-                            uncleRedChild.color = RBColor.BLACK;
                         } else { //or if is a leftchild
                             parent.rotateRight();
-                            uncleRedChild.color = RBColor.BLACK;
                         }
                     } else { //or if the sibiling is a rightchildren
                         //if the red child is a leftchild
                         if (sibiling.leftChild == uncleRedChild) {
                             //sibiling leftchild is red. sibiling rightchild can be black or red, it doesn't matter
+                            //symmetric case
                             parent.rightChild = uncleRedChild.leftChild;
                             uncleRedChild.parent = parent;
                             uncleRedChild.leftChild = parent;
@@ -513,12 +512,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                             uncleRedChild.rightChild.parent = sibiling;
                             uncleRedChild.rightChild = sibiling;
                             sibiling.parent = uncleRedChild;
-                            uncleRedChild.color = RBColor.BLACK;
                         } else { //or if it is a rightchild
                             parent.rotateleft();
-                            uncleRedChild.color = RBColor.BLACK;
                         }
                     }
+                    //color compensation, remove "double black" status on this
+                    uncleRedChild.color = RBColor.BLACK;
                 } else {
                     //recoloring
                     sibiling.color = RBColor.RED;
