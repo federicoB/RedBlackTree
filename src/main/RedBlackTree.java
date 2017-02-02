@@ -10,6 +10,7 @@
  */
 public class RedBlackTree<ItemType extends Comparable<ItemType>> {
 
+    private final RedBlackTree<ItemType> nullLeaf;
     /**
      * The value of the node.
      */
@@ -31,8 +32,6 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      */
     private RBColor color;
 
-    private RedBlackTree<ItemType> nullLeaf;
-
     /**
      * Create a new Tree with a given value.
      * Use this for create the root.
@@ -45,7 +44,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
         //the color of the root is black
         this.color = RBColor.BLACK;
         //create a new nullLeaf for the entire tree
-        this.nullLeaf = new RedBlackTree<ItemType>();
+        this.nullLeaf = new RedBlackTree<>();
         //set the leftchild as null because it doesn't exist yet.
         this.leftChild = nullLeaf;
         //set the rightchild as null because it doesn't exist yet.
@@ -443,7 +442,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 }
             } else { //if the node to delete has two children
                 //get its successor (the smaller element of the right subtree)
-                RedBlackTree<ItemType> childToDelete = toRemove.rightChild.min();
+                RedBlackTree<ItemType> childToDelete = toRemove.successorNode();
                 //copy ONLY the value
                 toRemove.value = childToDelete.value;
                 //remove the cloned child, this will end up to the case zero or one child
@@ -458,17 +457,17 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * Call this on a node after a rotation for check and rebalance the tree.
      * It check if the red-black tree rules are respected.
      *
-     * @param toDeleteColor
+     * @param deletedColor: the color of the deleted node
      * @see <a href="cs.purdue.edu/homes/ayg/CS251/slides/chap13c.pdf">Red black tree deletion from Purdue University</a>
      */
-    private void balanceDeletion(RBColor toDeleteColor) {
+    private void balanceDeletion(RBColor deletedColor) {
         //If either node1 or node2 is red
-        if (((toDeleteColor == RBColor.BLACK) && (this.color == RBColor.RED))
-                || ((toDeleteColor == RBColor.RED) && (this.color == RBColor.BLACK))) {
+        if (((deletedColor == RBColor.BLACK) && (this.color == RBColor.RED))
+                || ((deletedColor == RBColor.RED) && (this.color == RBColor.BLACK))) {
             //paint it black. This doesn't change black height
             this.color = RBColor.BLACK;
             //else if both nodes are black
-        } else if ((toDeleteColor == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
+        } else if ((deletedColor == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
             //by deletion the black height has changed. node "this" is now "double black"
             //get the sibiling
             RedBlackTree<ItemType> sibiling = this.getSibiling();
@@ -543,7 +542,7 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //paint one children red
                 parent.color = RBColor.RED;
                 //color compensation is not happened, this is still double black. Call balance for a recoloring.
-                this.balanceDeletion(toDeleteColor);
+                this.balanceDeletion(deletedColor);
             }
         }
     }
