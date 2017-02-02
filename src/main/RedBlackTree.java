@@ -441,14 +441,14 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //if the node is not the last element of the tree
                 if (replacer != nullLeaf || toRemove.parent != null) {
                     trasplant(toRemove, replacer);
-                    replacer.fixDelete(toRemove.color);
+                    replacer.balanceDeletion(toRemove.color);
                 }
             } else { //if the node to delete has two children
                 //get its successor (the smaller element of the right subtree)
                 RedBlackTree<ItemType> childToDelete = toRemove.rightChild.min();
                 //copy ONLY the value
                 toRemove.value = childToDelete.value;
-                //remove the cloned child, this will end up to zero or one child
+                //remove the cloned child, this will end up to the case zero or one child
                 childToDelete.delete(childToDelete.value);
             }
         }
@@ -461,76 +461,84 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
      * It check if the red-black tree rules are respected.
      *
      * @param toDeleteColor
+     * @see <a href="cs.purdue.edu/homes/ayg/CS251/slides/chap13c.pdf">Red black tree deletion from Purdue University</a>
      */
-    private void fixDelete(RBColor toDeleteColor) {
-        //If either u or v is red
+    private void balanceDeletion(RBColor toDeleteColor) {
+        //If either node1 or node2 is red
         if (((toDeleteColor == RBColor.BLACK) && (this.color == RBColor.RED))
                 || ((toDeleteColor == RBColor.RED) && (this.color == RBColor.BLACK))) {
             //paint it black. This doesn't change black height
             this.color = RBColor.BLACK;
             //else if both nodes are black
         } else if ((toDeleteColor == RBColor.BLACK) && (this.color == RBColor.BLACK)) {
-            //black height has changed. node "this" is double black
-            RedBlackTree<ItemType> uncle = this.getSibiling();
-            if (uncle.color == RBColor.BLACK) {
-                RedBlackTree<ItemType> uncleRedChild;
-                //get the red children of the uncle (if exist)
-                uncleRedChild = (uncle.leftChild.color == RBColor.RED) ? uncle.leftChild : ((uncle.rightChild.color == RBColor.RED) ? uncle.rightChild : null);
+            //by deletion the black height has changed. node "this" is now "double black"
+            //get the sibiling
+            RedBlackTree<ItemType> sibiling = this.getSibiling();
+            //if the sibiling color is black
+            if (sibiling.color == RBColor.BLACK) {
+                //get the red children of the sibiling
+                RedBlackTree<ItemType> uncleRedChild = (sibiling.leftChild.color == RBColor.RED) ? sibiling.leftChild : ((sibiling.rightChild.color == RBColor.RED) ? sibiling.rightChild : null);
+                //if a red children exist
                 if (uncleRedChild != null) {
                     //restructuring
-                    if (uncle.parent.leftChild == uncle) { //uncle is a leftchildren
-                        if (uncle.rightChild == uncleRedChild) {
-                            //uncle rightchild is red. uncle leftchild can be black or red, it doesn't matter
+                    //if sibiling is a leftchildren
+                    if (sibiling.parent.leftChild == sibiling) {
+                        //if the red child is a righchild
+                        if (sibiling.rightChild == uncleRedChild) {
+                            //sibiling rightchild is red. sibiling leftchild can be black or red, it doesn't matter
                             parent.leftChild = uncleRedChild.rightChild;
                             uncleRedChild.rightChild.parent = parent;
                             uncleRedChild.rightChild = parent;
                             uncleRedChild.parent = parent.parent;
                             parent.parent = uncleRedChild;
-                            uncle.rightChild = uncleRedChild.leftChild;
-                            uncleRedChild.leftChild = uncle;
-                            uncle.parent = uncleRedChild;
+                            sibiling.rightChild = uncleRedChild.leftChild;
+                            uncleRedChild.leftChild.parent = sibiling;
+                            uncleRedChild.leftChild = sibiling;
+                            sibiling.parent = uncleRedChild;
                             uncleRedChild.color = RBColor.BLACK;
-                        } else {
+                        } else { //or if is a leftchild
                             parent.rotateRight();
                             uncleRedChild.color = RBColor.BLACK;
                         }
-                    } else { //uncle is a rightchildren
-                        if (uncle.leftChild == uncleRedChild) {
-                            //uncle leftchild is red. uncle rightchild can be black or red, it doesn't matter
+                    } else { //or if the sibiling is a rightchildren
+                        //if the red child is a leftchild
+                        if (sibiling.leftChild == uncleRedChild) {
+                            //sibiling leftchild is red. sibiling rightchild can be black or red, it doesn't matter
                             parent.rightChild = uncleRedChild.leftChild;
                             uncleRedChild.parent = parent;
                             uncleRedChild.leftChild = parent;
                             uncleRedChild.parent = parent.parent;
                             parent.parent = uncleRedChild;
-                            uncle.leftChild = uncleRedChild.rightChild;
-                            uncleRedChild.rightChild.parent = uncle;
-                            uncleRedChild.rightChild = uncle;
-                            uncle.parent = uncleRedChild;
+                            sibiling.leftChild = uncleRedChild.rightChild;
+                            uncleRedChild.rightChild.parent = sibiling;
+                            uncleRedChild.rightChild = sibiling;
+                            sibiling.parent = uncleRedChild;
                             uncleRedChild.color = RBColor.BLACK;
-                        } else {
+                        } else { //or if it is a rightchild
                             parent.rotateleft();
                             uncleRedChild.color = RBColor.BLACK;
                         }
                     }
                 } else {
                     //recoloring
-                    uncle.color = RBColor.RED;
+                    sibiling.color = RBColor.RED;
                     if (parent.color == RBColor.RED) {
                         parent.color = RBColor.BLACK;
                     } else {
                         //else if the parent is black
                         //the parent is now "double black"
                         if (parent.parent != null) {
-                            parent.fixDelete(parent.color);
+                            parent.balanceDeletion(parent.color);
                         }
                     }
                 }
             } else {
-                //uncle is red so it has two black children
+                //adjustment
+                //sibiling is red so it has two black children
                 parent.rotateleft();
-                uncle.color = RBColor.BLACK;
+                sibiling.color = RBColor.BLACK;
                 parent.color = RBColor.RED;
-                this.fixDelete(toDeleteColor);
+                this.balanceDeletion(toDeleteColor);
             }
         }
     }
