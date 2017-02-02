@@ -520,13 +520,17 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                     uncleRedChild.color = RBColor.BLACK;
                 } else {
                     //recoloring
+                    //sibiling is black and has two black children
                     sibiling.color = RBColor.RED;
                     if (parent.color == RBColor.RED) {
+                        // a red parent can't have red children so paint it black
                         parent.color = RBColor.BLACK;
                     } else {
                         //else if the parent is black
-                        //the parent is now "double black"
+                        //the parent is now "double black" because we have recolored its black children
+                        //check if the parent is't the root
                         if (parent.parent != null) {
+                            //calla balance deletion on parent for fixing a double black problem
                             parent.balanceDeletion(parent.color);
                         }
                     }
@@ -535,8 +539,12 @@ public class RedBlackTree<ItemType extends Comparable<ItemType>> {
                 //adjustment
                 //sibiling is red so it has two black children
                 parent.rotateleft();
+                //now there is red parent (the old sibiling) with two black children (one is the old parent)
+                //paint the parent black
                 sibiling.color = RBColor.BLACK;
+                //paint one children red
                 parent.color = RBColor.RED;
+                //color compensation is not happened, this is still double black. Call balance for a recoloring.
                 this.balanceDeletion(toDeleteColor);
             }
         }
